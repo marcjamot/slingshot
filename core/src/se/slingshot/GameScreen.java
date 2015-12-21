@@ -6,7 +6,10 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import se.slingshot.components.BodyComponent;
+import se.slingshot.components.ControllableComponent;
 import se.slingshot.components.ImageComponent;
+import se.slingshot.systems.ControlSystem;
+import se.slingshot.systems.MovementSystem;
 import se.slingshot.systems.RenderSystem;
 
 /**
@@ -22,6 +25,10 @@ public class GameScreen implements Screen {
     public void show() {
         engine = new PooledEngine();
 
+        ControlSystem controlSystem = new ControlSystem();
+        engine.addSystem(controlSystem);
+        MovementSystem movementSystem = new MovementSystem();
+        engine.addSystem(movementSystem);
         RenderSystem renderSystem = new RenderSystem();
         engine.addSystem(renderSystem);
 
@@ -30,11 +37,12 @@ public class GameScreen implements Screen {
         player.add(new ImageComponent("spaceship_fire.png"));
         player.add(new BodyComponent(
                 new Vector2(3, 3),
-                new Vector2(),
-                new Vector2(),
+                new Vector2(1,0),
+                new Vector2(0,0),
                 2, 2,
                 0
         ));
+        player.add(new ControllableComponent(0,0));
         engine.addEntity(player);
 
         // Debug planet
