@@ -24,6 +24,8 @@ public class RenderSystem extends EntitySystem {
     private ComponentMapper<SizeComponent> sizeMapper = ComponentMapper.getFor(SizeComponent.class);
 
     // Render
+    private final static float TILE_SIZE = 256;
+
     private OrthographicCamera camera;
     private SpriteBatch spriteBatch;
 
@@ -31,7 +33,9 @@ public class RenderSystem extends EntitySystem {
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(ImageComponent.class, PositionComponent.class, SizeComponent.class).get());
 
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        camera = new OrthographicCamera(10, 10 * (h / w));
         spriteBatch = new SpriteBatch();
     }
 
@@ -52,8 +56,7 @@ public class RenderSystem extends EntitySystem {
             PositionComponent position = positionMapper.get(entity);
             SizeComponent size = sizeMapper.get(entity);
 
-            System.out.println("Målar x["+position.x+"] y["+position.y+"] w["+size.width+"] h["+size.height+"]");
-            spriteBatch.draw(image.texture, position.x, position.y, size.width, size.height);
+            spriteBatch.draw(image.texture, position.x * TILE_SIZE, position.y * TILE_SIZE, size.width * TILE_SIZE, size.height * TILE_SIZE);
         }
         spriteBatch.end();
     }
