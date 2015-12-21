@@ -81,11 +81,7 @@ public class RenderSystem extends EntitySystem {
             ImageComponent image = imageMapper.get(entity);
             BodyComponent body = bodyMapper.get(entity);
 
-<<<<<<< HEAD
-            spriteBatch.draw(image.texture, body.position.x, body.position.y, body.width, body.height);
-=======
-            spriteBatch.draw(image.texture, position.x * TILE_SIZE, position.y * TILE_SIZE, size.width * TILE_SIZE, size.height * TILE_SIZE);
->>>>>>> origin/master
+            spriteBatch.draw(image.texture, body.position.x * TILE_SIZE, body.position.y * TILE_SIZE, body.width * TILE_SIZE, body.height * TILE_SIZE);
         }
         spriteBatch.end();
     }
