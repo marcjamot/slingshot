@@ -81,8 +81,18 @@ public class RenderSystem extends EntitySystem {
             ImageComponent image = imageMapper.get(entity);
             BodyComponent body = bodyMapper.get(entity);
 
+            float halfWidth = body.width * 0.5f;
+            float halfHeight = body.height * 0.5f;
             float rotation = body.direction.angle() - 90;
-            spriteBatch.draw(image.texture, body.position.x * TILE_SIZE, body.position.y * TILE_SIZE, 0, 0, body.width * TILE_SIZE, body.height * TILE_SIZE, 1, 1, rotation, 0, 0, 256, 256, false, false);
+            spriteBatch.draw(
+                    image.texture,
+                    body.position.x * TILE_SIZE - halfWidth * TILE_SIZE,
+                    body.position.y * TILE_SIZE + halfHeight * TILE_SIZE,
+                    halfWidth * TILE_SIZE,
+                    halfHeight * TILE_SIZE,
+                    body.width * TILE_SIZE,
+                    body.height * TILE_SIZE,
+                    1, 1, rotation, 0, 0, (int)TILE_SIZE, (int)TILE_SIZE, false, false);
         }
         spriteBatch.end();
     }
