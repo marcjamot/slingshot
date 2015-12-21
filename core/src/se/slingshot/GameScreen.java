@@ -26,8 +26,8 @@ public class GameScreen implements Screen {
         // Debug init data
         Entity player = new Entity();
         player.add(new ImageComponent("spaceship.png"));
-        player.add(new PositionComponent(100, 100));
-        player.add(new SizeComponent(200000, 200000));
+        player.add(new PositionComponent(3, 3));
+        player.add(new SizeComponent(2, 2));
         engine.addEntity(player);
     }
 
