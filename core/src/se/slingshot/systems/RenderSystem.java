@@ -45,7 +45,7 @@ public class RenderSystem extends EntitySystem {
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(10, 10 * (h / w));
+        camera = new OrthographicCamera(30, 30 * (h / w));
         spriteBatch = new SpriteBatch();
 
         starImage = new Texture("star.png");
@@ -81,7 +81,8 @@ public class RenderSystem extends EntitySystem {
             ImageComponent image = imageMapper.get(entity);
             BodyComponent body = bodyMapper.get(entity);
 
-            spriteBatch.draw(image.texture, body.position.x * TILE_SIZE, body.position.y * TILE_SIZE, body.width * TILE_SIZE, body.height * TILE_SIZE);
+            float rotation = body.direction.angle() - 90;
+            spriteBatch.draw(image.texture, body.position.x * TILE_SIZE, body.position.y * TILE_SIZE, 0, 0, body.width * TILE_SIZE, body.height * TILE_SIZE, 1, 1, rotation, 0, 0, 256, 256, false, false);
         }
         spriteBatch.end();
     }
