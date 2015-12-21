@@ -27,10 +27,17 @@ public class GameScreen implements Screen {
 
         // Debug init data
         Entity player = new Entity();
-        player.add(new ImageComponent("spaceship.png"));
+        player.add(new ImageComponent("spaceship_fire.png"));
         player.add(new PositionComponent(3, 3));
         player.add(new SizeComponent(2, 2));
         engine.addEntity(player);
+
+        // Debug planet
+        Entity planet = new Entity();
+        planet.add(new ImageComponent("sun.png"));
+        planet.add(new PositionComponent(4, 4));
+        planet.add(new SizeComponent(4, 4));
+        engine.addEntity(planet);
     }
 
     @Override

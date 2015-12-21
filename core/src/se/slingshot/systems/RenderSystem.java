@@ -5,10 +5,19 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import se.slingshot.components.ImageComponent;
 import se.slingshot.components.PositionComponent;
 import se.slingshot.components.SizeComponent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Vector;
 
 /**
  * DESC
@@ -29,6 +38,9 @@ public class RenderSystem extends EntitySystem {
     private OrthographicCamera camera;
     private SpriteBatch spriteBatch;
 
+    private Texture starImage;
+    private List<Vector3> stars;
+
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(ImageComponent.class, PositionComponent.class, SizeComponent.class).get());
@@ -37,6 +49,16 @@ public class RenderSystem extends EntitySystem {
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(10, 10 * (h / w));
         spriteBatch = new SpriteBatch();
+
+        starImage = new Texture("star.png");
+        stars = new ArrayList<Vector3>(100);
+        for (int i = 0; i < 100; i++) {
+            float x = MathUtils.random(0.0f, 20.0f);
+            float y = MathUtils.random(0.0f, 20.0f);
+            float size = MathUtils.random(0.0f, 0.1f);
+            Vector3 star = new Vector3(x, y, size);
+            stars.add(i, star);
+        }
     }
 
     @Override
@@ -48,6 +70,12 @@ public class RenderSystem extends EntitySystem {
         spriteBatch.setTransformMatrix(camera.combined);
 
         // todo: render background
+        spriteBatch.begin();
+        for (int i = 0; i < 100; i++) {
+            Vector3 star = stars.get(i);
+            spriteBatch.draw(starImage, star.x * TILE_SIZE, star.y * TILE_SIZE, star.z * TILE_SIZE, star.z * TILE_SIZE);
+        }
+        spriteBatch.end();
 
         spriteBatch.begin();
         for (int i = 0; i < entities.size(); i++) {
