@@ -6,9 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ImageComponent;
-import se.slingshot.components.PositionComponent;
-import se.slingshot.components.SizeComponent;
 
 /**
  * DESC
@@ -20,8 +19,7 @@ public class RenderSystem extends EntitySystem {
     // ECS
     private ImmutableArray<Entity> entities;
     private ComponentMapper<ImageComponent> imageMapper = ComponentMapper.getFor(ImageComponent.class);
-    private ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<SizeComponent> sizeMapper = ComponentMapper.getFor(SizeComponent.class);
+    private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
     // Render
     private OrthographicCamera camera;
@@ -29,7 +27,7 @@ public class RenderSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(ImageComponent.class, PositionComponent.class, SizeComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(ImageComponent.class, BodyComponent.class).get());
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         spriteBatch = new SpriteBatch();
@@ -49,11 +47,9 @@ public class RenderSystem extends EntitySystem {
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             ImageComponent image = imageMapper.get(entity);
-            PositionComponent position = positionMapper.get(entity);
-            SizeComponent size = sizeMapper.get(entity);
+            BodyComponent body = bodyMapper.get(entity);
 
-            System.out.println("Målar x["+position.x+"] y["+position.y+"] w["+size.width+"] h["+size.height+"]");
-            spriteBatch.draw(image.texture, position.x, position.y, size.width, size.height);
+            spriteBatch.draw(image.texture, body.position.x, body.position.y, body.width, body.height);
         }
         spriteBatch.end();
     }

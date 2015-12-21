@@ -5,8 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import se.slingshot.components.ImageComponent;
-import se.slingshot.components.PositionComponent;
-import se.slingshot.components.SizeComponent;
 import se.slingshot.systems.RenderSystem;
 
 /**
