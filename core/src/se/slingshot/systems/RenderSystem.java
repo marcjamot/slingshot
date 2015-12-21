@@ -10,9 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ImageComponent;
-import se.slingshot.components.PositionComponent;
-import se.slingshot.components.SizeComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,7 @@ public class RenderSystem extends EntitySystem {
     // ECS
     private ImmutableArray<Entity> entities;
     private ComponentMapper<ImageComponent> imageMapper = ComponentMapper.getFor(ImageComponent.class);
-    private ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class);
-    private ComponentMapper<SizeComponent> sizeMapper = ComponentMapper.getFor(SizeComponent.class);
+    private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
     // Render
     private final static float TILE_SIZE = 256;
@@ -43,7 +41,7 @@ public class RenderSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(ImageComponent.class, PositionComponent.class, SizeComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(ImageComponent.class, BodyComponent.class).get());
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -81,10 +79,13 @@ public class RenderSystem extends EntitySystem {
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             ImageComponent image = imageMapper.get(entity);
-            PositionComponent position = positionMapper.get(entity);
-            SizeComponent size = sizeMapper.get(entity);
+            BodyComponent body = bodyMapper.get(entity);
 
+<<<<<<< HEAD
+            spriteBatch.draw(image.texture, body.position.x, body.position.y, body.width, body.height);
+=======
             spriteBatch.draw(image.texture, position.x * TILE_SIZE, position.y * TILE_SIZE, size.width * TILE_SIZE, size.height * TILE_SIZE);
+>>>>>>> origin/master
         }
         spriteBatch.end();
     }
