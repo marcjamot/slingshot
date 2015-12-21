@@ -8,11 +8,11 @@ import com.badlogic.ashley.core.Component;
 public class ControllableComponent implements Component {
     public float directionThrust;
     public float forwardThrust;
-    public float directionThrustSpeed = 20;
-    public float forwardThrustForce = 10;
+    public float directionThrustSpeed;
+    public float forwardThrustForce;
 
-    public ControllableComponent(float directionThrust, float forwardThrust) {
-        this.directionThrust = directionThrust;
-        this.forwardThrust = forwardThrust;
+    public ControllableComponent(float directionThrustSpeed, float forwardThrustForce) {
+        this.directionThrustSpeed = directionThrustSpeed;
+        this.forwardThrustForce = forwardThrustForce;
     }
 }

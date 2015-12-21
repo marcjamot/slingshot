@@ -40,9 +40,9 @@ public class GameScreen implements Screen {
                 new Vector2(1,0),
                 new Vector2(0,0),
                 2, 2,
-                0
+                1
         ));
-        player.add(new ControllableComponent(0,0));
+        player.add(new ControllableComponent(180,10));
         engine.addEntity(player);
 
         // Debug planet
