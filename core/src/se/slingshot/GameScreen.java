@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
                 2, 2,
                 1, 0.5f
         ));
-        player.add(new ControllableComponent(180,10));
+        player.add(new ControllableComponent(180,2));
         player.add(new NoGravityComponent());
         player.add(new DeathComponent());
         engine.addEntity(player);
@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
         };
         planet.add(new RenderComponent(planetTextures, false, 1.0f));
         planet.add(new BodyComponent(
-                new Vector2(5, 5),
+                new Vector2(10, 10),
                 new Vector2(),
                 new Vector2(),
                 4, 4,
