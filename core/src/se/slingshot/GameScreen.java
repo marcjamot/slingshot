@@ -5,10 +5,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
-import se.slingshot.components.BodyComponent;
-import se.slingshot.components.ControllableComponent;
-import se.slingshot.components.ImageComponent;
+import se.slingshot.components.*;
 import se.slingshot.systems.ControlSystem;
+import se.slingshot.systems.GravitySystem;
 import se.slingshot.systems.MovementSystem;
 import se.slingshot.systems.RenderSystem;
 
@@ -27,6 +26,8 @@ public class GameScreen implements Screen {
 
         ControlSystem controlSystem = new ControlSystem();
         engine.addSystem(controlSystem);
+        GravitySystem gravitySystem = new GravitySystem();
+        engine.addSystem(gravitySystem);
         MovementSystem movementSystem = new MovementSystem();
         engine.addSystem(movementSystem);
         RenderSystem renderSystem = new RenderSystem();
@@ -43,18 +44,20 @@ public class GameScreen implements Screen {
                 1
         ));
         player.add(new ControllableComponent(180,10));
+        player.add(new NoGravityComponent());
         engine.addEntity(player);
 
         // Debug planet
         Entity planet = new Entity();
         planet.add(new ImageComponent("sun.png"));
         planet.add(new BodyComponent(
-                new Vector2(4, 4),
+                new Vector2(5, 5),
                 new Vector2(),
                 new Vector2(),
                 4, 4,
-                0
+                1000
         ));
+        planet.add(new GravityComponent());
         engine.addEntity(planet);
     }
 

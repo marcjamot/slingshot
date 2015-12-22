@@ -11,27 +11,38 @@ import se.slingshot.components.ControllableComponent;
  */
 public class MovementSystem extends EntitySystem {
     // ECS
-    private ImmutableArray<Entity> entities;
+    private ImmutableArray<Entity> controlEntities;
+    private ImmutableArray<Entity> bodyEntities;
     private ComponentMapper<ControllableComponent> controlableMapper = ComponentMapper.getFor(ControllableComponent.class);
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(ControllableComponent.class, BodyComponent.class).get());
+        controlEntities = engine.getEntitiesFor(Family.all(ControllableComponent.class, BodyComponent.class).get());
+        bodyEntities = engine.getEntitiesFor(Family.all(BodyComponent.class).get());
     }
 
     @Override
     public void update(float deltaTime) {
 
-        for (int i = 0; i < entities.size(); i++) {
-            Entity entity = entities.get(i);
+        //Applying Controls
+        for (int i = 0; i < controlEntities.size(); i++) {
+            Entity entity = controlEntities.get(i);
             ControllableComponent control = controlableMapper.get(entity);
             BodyComponent body = bodyMapper.get(entity);
 
             body.direction.rotate(control.directionThrust * deltaTime);
             Vector2 tmp = new Vector2(body.direction);
-            body.velocity.add(tmp.scl(control.forwardThrust/body.weight * deltaTime));
-            tmp = new Vector2(body.velocity);
+            tmp.scl(control.forwardThrust/body.weight * deltaTime);
+            body.velocity.add(tmp);
+        }
+
+        //Movement
+        for (int i = 0; i < bodyEntities.size(); i++) {
+            Entity entity = bodyEntities.get(i);
+            BodyComponent body = bodyMapper.get(entity);
+
+            Vector2 tmp = new Vector2(body.velocity);
             body.position.add(tmp.scl(deltaTime));
         }
     }
