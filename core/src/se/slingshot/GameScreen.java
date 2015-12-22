@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
         };
         player.add(new RenderComponent(playerTextures, true, 0.5f));
         player.add(new BodyComponent(
-                new Vector2(9f, 15f),
+                new Vector2(19f, 17f),
                 new Vector2(1,0),
                 new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),(float)Math.sqrt(GravitySystem.G*30 / 1)),
                 0.25f, 0.25f,
@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
         };
         sun.add(new RenderComponent(sunTextures, false, 1.0f));
         sun.add(new BodyComponent(
-                new Vector2(10, 10),
+                new Vector2(20, 12),
                 new Vector2(),
                 new Vector2(),
                 1f, 1f,
@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
         };
         planet.add(new RenderComponent(planetTextures, false, 1.0f));
         planet.add(new BodyComponent(
-                new Vector2(10, 20),
+                new Vector2(20, 22),
                 new Vector2(),
                 new Vector2((float)Math.sqrt(GravitySystem.G*80 / 10),0),
                 0.8f, 0.8f,
@@ -102,7 +102,7 @@ public class GameScreen implements Screen {
         };
         planet2.add(new RenderComponent(planet2Textures, false, 1.0f));
         planet2.add(new BodyComponent(
-                new Vector2(10, 15),
+                new Vector2(20, 17),
                 new Vector2(),
                 new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),0),
                 0.5f, 0.5f,
