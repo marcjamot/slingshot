@@ -12,6 +12,7 @@ import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ControllableComponent;
 import se.slingshot.components.CollisionComponent;
 import se.slingshot.components.RenderComponent;
+import se.slingshot.interfaces.RenderInterface;
 import se.slingshot.systems.*;
 
 /**
@@ -30,7 +31,7 @@ public class GameScreen implements Screen {
         MBassador<CollisionComponent> eventBus = new MBassador<CollisionComponent>();
         ControllableComponent playerControllableComponent = new ControllableComponent(180f,0.5f);
 
-        CollisionSystem collisionSystem = new CollisionSystem(eventBus);
+        CollisionSystem collisionSystem = new CollisionSystem(eventBus, true);
         engine.addSystem(collisionSystem);
         ControlSystem controlSystem = new ControlSystem();
         engine.addSystem(controlSystem);
@@ -40,8 +41,13 @@ public class GameScreen implements Screen {
         engine.addSystem(gravitySystem);
         MovementSystem movementSystem = new MovementSystem();
         engine.addSystem(movementSystem);
-        renderSystem = new RenderSystem(playerControllableComponent);
+
+        RenderInterface[] renderInterfaces = new RenderInterface[]{
+                collisionSystem
+        };
+        renderSystem = new RenderSystem(playerControllableComponent, renderInterfaces);
         engine.addSystem(renderSystem);
+
 
         // Debug init data
         Entity player = new Entity();

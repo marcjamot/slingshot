@@ -2,10 +2,16 @@ package se.slingshot.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import net.engio.mbassy.bus.MBassador;
 import se.slingshot.components.BodyComponent;
 import se.slingshot.components.CollisionComponent;
+import se.slingshot.interfaces.RenderInterface;
 
 /**
  * Checks for collisions between KillableComponent and BodyComponent
@@ -13,7 +19,7 @@ import se.slingshot.components.CollisionComponent;
  * @author Marc
  * @since 2015-12
  */
-public class CollisionSystem extends EntitySystem {
+public class CollisionSystem extends EntitySystem implements RenderInterface {
     // ECS
     private ImmutableArray<Entity> collisionEntities;
     private ImmutableArray<Entity> bodyEntities;
@@ -23,12 +29,16 @@ public class CollisionSystem extends EntitySystem {
     // Collision
     /** EventBus is used to pass messages between systems conveniently */
     private final MBassador<CollisionComponent> eventBus;
+    /** If collision circles should be drawn */
+    private final boolean debug;
 
     /**
      * @param eventBus EventBus is used to pass messages between systems conveniently
+     * @param debug If collision circles should be drawn
      */
-    public CollisionSystem(MBassador<CollisionComponent> eventBus) {
+    public CollisionSystem(MBassador<CollisionComponent> eventBus, boolean debug) {
         this.eventBus = eventBus;
+        this.debug = debug;
     }
 
     @Override
@@ -59,6 +69,23 @@ public class CollisionSystem extends EntitySystem {
                     /** Tell all interested systems that the collision occurred */
                     eventBus.post(cCollision).now();
                 }
+            }
+        }
+    }
+
+    @Override
+    public void render(Camera camera, SpriteBatch spriteBatch, float pixelPerMeter) {
+        if(debug) {
+            for (int i = 0; i < bodyEntities.size(); i++) {
+                Entity entity = bodyEntities.get(i);
+                BodyComponent body = bodyMapper.get(entity);
+
+                ShapeRenderer shapeRenderer = new ShapeRenderer();
+                shapeRenderer.setTransformMatrix(camera.combined);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(Color.BLUE);
+                shapeRenderer.circle(body.position.x * pixelPerMeter, body.position.y * pixelPerMeter, body.radius * pixelPerMeter);
+                shapeRenderer.end();
             }
         }
     }
