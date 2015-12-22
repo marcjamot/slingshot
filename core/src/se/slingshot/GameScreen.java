@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
     public void show() {
         engine = new PooledEngine();
         MBassador<CollisionComponent> eventBus = new MBassador<CollisionComponent>();
-        ControllableComponent playerControllableComponent = new ControllableComponent(180f,2f);
+        ControllableComponent playerControllableComponent = new ControllableComponent(180f,1.5f);
 
         CollisionSystem collisionSystem = new CollisionSystem(eventBus, true);
         engine.addSystem(collisionSystem);
@@ -48,6 +48,8 @@ public class GameScreen implements Screen {
         };
         renderSystem = new RenderSystem(playerControllableComponent, renderInterfaces);
         engine.addSystem(renderSystem);
+        WinConditionSystem winConditionSystem = new WinConditionSystem();
+        engine.addSystem(winConditionSystem);
 
 
         // Debug init data
@@ -56,11 +58,12 @@ public class GameScreen implements Screen {
                 new Texture("spaceship_fire.png"),
                 new Texture("spaceship_fire_2.png")
         };
+        Vector2 playerPosition = new Vector2(8f, 8f);
         player.add(new RenderComponent(playerTextures, true, 0.5f));
         player.add(new BodyComponent(
-                new Vector2(15f, 17f),
+                playerPosition,
                 new Vector2(1,0),
-                new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),(float)Math.sqrt(GravitySystem.G*30 / 1)),
+                new Vector2(),
                 2f, 2f,
                 1, 0.8f
         ));
@@ -80,29 +83,28 @@ public class GameScreen implements Screen {
                 sunPossition,
                 new Vector2(),
                 new Vector2(),
-                4f, 4f,
-                100, 2f
+                5f, 5f,
+                400, 2.5f
         ));
         sun.add(new GravityComponent());
         engine.addEntity(sun);
 
-        // Debug planet
+        // Debug planets
         Entity planet = new Entity();
         Texture[] planetTextures = new Texture[]{
                 new Texture("earth.png")
         };
         planet.add(new RenderComponent(planetTextures, false, 1.0f));
         planet.add(new BodyComponent(
-                new Vector2(20, 22),
                 new Vector2(),
                 new Vector2(),
-                3f, 3f,
-                60, 1.5f
+                new Vector2(),
+                4f, 4f,
+                200, 2f
         ));
         planet.add(new GravityComponent());
-        planet.add(new OrbitComponent(sunPossition,10,45,10));
+        planet.add(new OrbitComponent(sunPossition,10,45,20));
         engine.addEntity(planet);
-
 
         // Debug planet
         Entity planet2 = new Entity();
@@ -111,14 +113,24 @@ public class GameScreen implements Screen {
         };
         planet2.add(new RenderComponent(planet2Textures, false, 1.0f));
         planet2.add(new BodyComponent(
-                new Vector2(20, 17),
+                new Vector2(40f,20f),
                 new Vector2(),
                 new Vector2(),
-                2f, 2f,
-                40, 1f
+                3f, 3f,
+                150, 1.5f
         ));
         planet2.add(new GravityComponent());
         engine.addEntity(planet2);
+
+        //Debug goal area
+        Entity goalArea = new Entity();
+        goalArea.add(new GoalAreaComponent(
+                new Vector2(40f,20f),
+                5f,
+                playerPosition
+        ));
+        engine.addEntity(goalArea);
+
     }
 
     @Override
