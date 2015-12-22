@@ -14,6 +14,9 @@ public class RenderComponent implements Component {
     public final boolean repeatAnimation;
     public final float timePerAnimation;
 
+    /** If the entity should be rendered */
+    public boolean visible = true;
+
     public int animationIndex;
     public float animationDeltaTime;
 

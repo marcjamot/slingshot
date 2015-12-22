@@ -15,9 +15,12 @@ public class ControlSystem extends EntitySystem implements InputProcessor {
     private ImmutableArray<Entity> entities;
     private ComponentMapper<ControllableComponent> controlableMapper = ComponentMapper.getFor(ControllableComponent.class);
 
+    // Control
     private boolean forwardThrust = false;
     private boolean leftThrust = false;
     private boolean rightThrust = false;
+
+
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -27,11 +30,17 @@ public class ControlSystem extends EntitySystem implements InputProcessor {
 
     @Override
     public void update(float deltaTime) {
-
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             ControllableComponent control = controlableMapper.get(entity);
 
+            // If we have no fuel, we can't move the ship
+            if(control.fuel == 0){
+                control.directionThrust = 0;
+                continue;
+            }
+
+            // Check input
             if (forwardThrust) {
                 control.forwardThrust = control.forwardThrustForce;
             } else {
@@ -45,6 +54,14 @@ public class ControlSystem extends EntitySystem implements InputProcessor {
                 directionThrust -= 1;
             }
             control.directionThrust = control.directionThrustSpeed * directionThrust;
+
+            // Add thruster active time for fuel consumption
+            if(forwardThrust){
+                control.fuel -= deltaTime * 0.1f;
+                if(control.fuel < 0){
+                    control.fuel = 0;
+                }
+            }
         }
     }
 

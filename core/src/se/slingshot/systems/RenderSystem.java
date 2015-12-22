@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import se.slingshot.components.BodyComponent;
+import se.slingshot.components.ControllableComponent;
 import se.slingshot.components.RenderComponent;
+import se.slingshot.gui.Gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +40,25 @@ public class RenderSystem extends EntitySystem {
     private Texture starImage;
     private List<Vector3> stars;
 
+    private final Gui gui = new Gui();
+    private final ControllableComponent controllableComponent;
+
+    /**
+     * @param controllableComponent Player controllable component for fuel level in gui
+     */
+    public RenderSystem(ControllableComponent controllableComponent) {
+        this.controllableComponent = controllableComponent;
+    }
+
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(RenderComponent.class, BodyComponent.class).get());
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(30, 30 * (h / w));
+        gui.create(controllableComponent);
+        camera = new OrthographicCamera();
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+        resize(width, height);
         spriteBatch = new SpriteBatch();
 
         starImage = new Texture("star.png");
@@ -56,6 +70,16 @@ public class RenderSystem extends EntitySystem {
             Vector3 star = new Vector3(x, y, size);
             stars.add(i, star);
         }
+    }
+
+    /**
+     * Screen resize
+     * @param width Screen width
+     * @param height Screen height
+     */
+    public void resize(int width, int height){
+        camera.setToOrtho(false, 30, 30);
+        gui.resize(width, height);
     }
 
     @Override
@@ -79,18 +103,23 @@ public class RenderSystem extends EntitySystem {
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             BodyComponent body = bodyMapper.get(entity);
-            RenderComponent image = imageMapper.get(entity);
+            RenderComponent render = imageMapper.get(entity);
+
+            // Check if entity should be rendered
+            if (!render.visible) {
+                continue;
+            }
 
             // Animation
-            image.animationDeltaTime += deltaTime;
-            if(image.animationDeltaTime > image.timePerAnimation){
-                image.animationDeltaTime -= image.timePerAnimation;
-                image.animationIndex += 1;
-                if(image.animationIndex >= image.textures.length){
-                    if(image.repeatAnimation) {
-                        image.animationIndex = 0;
+            render.animationDeltaTime += deltaTime;
+            if (render.animationDeltaTime > render.timePerAnimation) {
+                render.animationDeltaTime -= render.timePerAnimation;
+                render.animationIndex += 1;
+                if (render.animationIndex >= render.textures.length) {
+                    if (render.repeatAnimation) {
+                        render.animationIndex = 0;
                     } else {
-                        image.animationIndex -= 1;
+                        render.animationIndex -= 1;
                     }
                 }
             }
@@ -101,19 +130,19 @@ public class RenderSystem extends EntitySystem {
             float rotation = body.direction.angle() - 90;
 
             spriteBatch.draw(
-                    image.textures[image.animationIndex],
+                    render.textures[render.animationIndex],
                     body.position.x * TILE_SIZE - halfWidth * TILE_SIZE,
                     body.position.y * TILE_SIZE - halfHeight * TILE_SIZE,
                     halfWidth * TILE_SIZE,
                     halfHeight * TILE_SIZE,
                     body.width * TILE_SIZE,
                     body.height * TILE_SIZE,
-                    1, 1, rotation, 0, 0, (int)TILE_SIZE, (int)TILE_SIZE, false, false);
+                    1, 1, rotation, 0, 0, (int) TILE_SIZE, (int) TILE_SIZE, false, false);
         }
         spriteBatch.end();
 
         // Debug draw
-        if(drawPointActive){
+        if (drawPointActive) {
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.setTransformMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -121,13 +150,22 @@ public class RenderSystem extends EntitySystem {
             shapeRenderer.circle(drawPointX * TILE_SIZE, drawPointY * TILE_SIZE, drawPointSize);
             shapeRenderer.end();
         }
+
+        gui.render(deltaTime);
+    }
+
+    @Override
+    public void removedFromEngine(Engine engine) {
+        gui.dispose();
+        spriteBatch.dispose();
     }
 
     private static boolean drawPointActive;
     private static float drawPointX;
     private static float drawPointY;
     private static float drawPointSize;
-    public static void drawPoint(float x, float y, float size){
+
+    public static void drawPoint(float x, float y, float size) {
         drawPointActive = true;
         drawPointX = x;
         drawPointY = y;

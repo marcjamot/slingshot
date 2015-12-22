@@ -10,6 +10,7 @@ public class ControllableComponent implements Component {
     public float forwardThrust;
     public float directionThrustSpeed;
     public float forwardThrustForce;
+    public float fuel = 1.0f;
 
     public ControllableComponent(float directionThrustSpeed, float forwardThrustForce) {
         this.directionThrustSpeed = directionThrustSpeed;

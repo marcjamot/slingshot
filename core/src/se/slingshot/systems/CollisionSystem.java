@@ -3,8 +3,9 @@ package se.slingshot.systems;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
+import net.engio.mbassy.bus.MBassador;
 import se.slingshot.components.BodyComponent;
-import se.slingshot.components.DeathComponent;
+import se.slingshot.components.CollisionComponent;
 
 /**
  * Checks for collisions between KillableComponent and BodyComponent
@@ -14,35 +15,50 @@ import se.slingshot.components.DeathComponent;
  */
 public class CollisionSystem extends EntitySystem {
     // ECS
-    private ImmutableArray<Entity> killableEntities;
+    private ImmutableArray<Entity> collisionEntities;
     private ImmutableArray<Entity> bodyEntities;
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
+    private ComponentMapper<CollisionComponent> collisionMapper = ComponentMapper.getFor(CollisionComponent.class);
+
+    // Collision
+    /** EventBus is used to pass messages between systems conveniently */
+    private final MBassador<CollisionComponent> eventBus;
+
+    /**
+     * @param eventBus EventBus is used to pass messages between systems conveniently
+     */
+    public CollisionSystem(MBassador<CollisionComponent> eventBus) {
+        this.eventBus = eventBus;
+    }
 
     @Override
     public void addedToEngine(Engine engine) {
-        killableEntities = engine.getEntitiesFor(Family.all(BodyComponent.class, DeathComponent.class).get());
+        collisionEntities = engine.getEntitiesFor(Family.all(BodyComponent.class, CollisionComponent.class).get());
         bodyEntities = engine.getEntitiesFor(Family.all(BodyComponent.class).get());
     }
 
     @Override
     public void update(float deltaTime) {
-        for (int i = 0; i < killableEntities.size(); i++) {
-            Entity killableEntity = killableEntities.get(i);
-            BodyComponent killableBody = bodyMapper.get(killableEntity);
+        for (int i = 0; i < collisionEntities.size(); i++) {
+            Entity collisionEntity = collisionEntities.get(i);
+            BodyComponent cBody = bodyMapper.get(collisionEntity);
+            CollisionComponent cCollision = collisionMapper.get(collisionEntity);
 
             for (int j = 0; j < bodyEntities.size(); j++) {
                 Entity bodyEntity = bodyEntities.get(j);
-                if(killableEntity == bodyEntity)
+                if(collisionEntity == bodyEntity)
                     continue;
-                BodyComponent bodyBody = bodyMapper.get(bodyEntity);
+                BodyComponent bBody = bodyMapper.get(bodyEntity);
 
                 // Logic
-                Vector2 b1 = new Vector2(killableBody.position);
-                Vector2 b2 = new Vector2(bodyBody.position);
+                Vector2 b1 = new Vector2(bBody.position);
+                Vector2 b2 = new Vector2(cBody.position);
                 float distance = b1.dst(b2);
-                float radiusDistance = killableBody.radius + bodyBody.radius;
-                if(distance < radiusDistance)
-                    System.out.println("YOU DIE NOW");
+                float radiusDistance = cBody.radius + bBody.radius;
+                if(distance < radiusDistance) {
+                    /** Tell all interested systems that the collision occurred */
+                    eventBus.post(cCollision).now();
+                }
             }
         }
     }

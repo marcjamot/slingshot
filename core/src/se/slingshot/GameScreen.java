@@ -6,16 +6,13 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import net.engio.mbassy.bus.MBassador;
 import se.slingshot.components.*;
 import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ControllableComponent;
-import se.slingshot.components.DeathComponent;
+import se.slingshot.components.CollisionComponent;
 import se.slingshot.components.RenderComponent;
-import se.slingshot.systems.CollisionSystem;
-import se.slingshot.systems.ControlSystem;
-import se.slingshot.systems.GravitySystem;
-import se.slingshot.systems.MovementSystem;
-import se.slingshot.systems.RenderSystem;
+import se.slingshot.systems.*;
 
 /**
  * DESC
@@ -25,20 +22,25 @@ import se.slingshot.systems.RenderSystem;
  */
 public class GameScreen implements Screen {
     private Engine engine;
+    private RenderSystem renderSystem;
 
     @Override
     public void show() {
         engine = new PooledEngine();
+        MBassador<CollisionComponent> eventBus = new MBassador<CollisionComponent>();
+        ControllableComponent playerControllableComponent = new ControllableComponent(180f,0.5f);
 
-        CollisionSystem collisionSystem = new CollisionSystem();
+        CollisionSystem collisionSystem = new CollisionSystem(eventBus);
         engine.addSystem(collisionSystem);
         ControlSystem controlSystem = new ControlSystem();
         engine.addSystem(controlSystem);
+        DeathSystem deathSystem = new DeathSystem(eventBus);
+        engine.addSystem(deathSystem);
         GravitySystem gravitySystem = new GravitySystem();
         engine.addSystem(gravitySystem);
         MovementSystem movementSystem = new MovementSystem();
         engine.addSystem(movementSystem);
-        RenderSystem renderSystem = new RenderSystem();
+        renderSystem = new RenderSystem(playerControllableComponent);
         engine.addSystem(renderSystem);
 
         // Debug init data
@@ -49,15 +51,15 @@ public class GameScreen implements Screen {
         };
         player.add(new RenderComponent(playerTextures, true, 0.5f));
         player.add(new BodyComponent(
-                new Vector2(9.5f, 15f),
+                new Vector2(9f, 15f),
                 new Vector2(1,0),
-                new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),(float)Math.sqrt(GravitySystem.G*30 / 0.5)),
+                new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),(float)Math.sqrt(GravitySystem.G*30 / 1)),
                 0.25f, 0.25f,
                 1, 0.1f
         ));
-        player.add(new ControllableComponent(180,1));
+        player.add(playerControllableComponent);
         player.add(new NoGravityComponent());
-        player.add(new DeathComponent());
+        player.add(new CollisionComponent(player));
         engine.addEntity(player);
 
         // Debug sun
@@ -71,7 +73,7 @@ public class GameScreen implements Screen {
                 new Vector2(),
                 new Vector2(),
                 1f, 1f,
-                80, 1.4f
+                80, 0.5f
         ));
         sun.add(new FullGravityComponent());
         engine.addEntity(sun);
@@ -87,7 +89,7 @@ public class GameScreen implements Screen {
                 new Vector2(),
                 new Vector2((float)Math.sqrt(GravitySystem.G*80 / 10),0),
                 0.8f, 0.8f,
-                50, 1.4f
+                50, 0.4f
         ));
         planet.add(new HalfGravityComponent());
         engine.addEntity(planet);
@@ -104,7 +106,7 @@ public class GameScreen implements Screen {
                 new Vector2(),
                 new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),0),
                 0.5f, 0.5f,
-                30, 1.4f
+                30, 0.25f
         ));
         planet2.add(new HalfGravityComponent());
         engine.addEntity(planet2);
@@ -117,7 +119,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        renderSystem.resize(width, height);
     }
 
     @Override
