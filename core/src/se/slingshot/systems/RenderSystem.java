@@ -3,10 +3,12 @@ package se.slingshot.systems;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -95,5 +97,26 @@ public class RenderSystem extends EntitySystem {
                     1, 1, rotation, 0, 0, (int)TILE_SIZE, (int)TILE_SIZE, false, false);
         }
         spriteBatch.end();
+
+        // Debug draw
+        if(drawPointActive){
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.setTransformMatrix(camera.combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.BLUE);
+            shapeRenderer.circle(drawPointX * TILE_SIZE, drawPointY * TILE_SIZE, drawPointSize);
+            shapeRenderer.end();
+        }
+    }
+
+    private static boolean drawPointActive;
+    private static float drawPointX;
+    private static float drawPointY;
+    private static float drawPointSize;
+    public static void drawPoint(float x, float y, float size){
+        drawPointActive = true;
+        drawPointX = x;
+        drawPointY = y;
+        drawPointSize = size;
     }
 }

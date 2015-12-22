@@ -2,6 +2,7 @@ package se.slingshot.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Vector2;
 import se.slingshot.components.BodyComponent;
 import se.slingshot.components.DeathComponent;
 
@@ -36,16 +37,13 @@ public class CollisionSystem extends EntitySystem {
                 BodyComponent bodyBody = bodyMapper.get(bodyEntity);
 
                 // Logic
-                float distance = killableBody.position.dst(bodyBody.position);
-                float radiusDistance = getRadius(killableBody) + getRadius(bodyBody);
+                Vector2 b1 = new Vector2(killableBody.position).add(0, killableBody.height);
+                Vector2 b2 = new Vector2(bodyBody.position).add(0, bodyBody.height);
+                float distance = b1.dst(b2);
+                float radiusDistance = killableBody.radius + bodyBody.radius;
                 if(distance < radiusDistance)
                     System.out.println("YOU DIE NOW");
             }
         }
     }
-
-    private float getRadius(BodyComponent body){
-        return Math.min(body.width, body.height);
-    }
-
 }
