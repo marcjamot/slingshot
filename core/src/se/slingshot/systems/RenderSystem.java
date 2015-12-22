@@ -10,18 +10,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import se.slingshot.components.BodyComponent;
-import se.slingshot.components.ImageComponent;
+import se.slingshot.components.RenderComponent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Vector;
 
 /**
- * DESC
+ * Handles animation and rendering
  *
  * @author Marc
  * @since 2015-12
@@ -29,7 +26,7 @@ import java.util.Vector;
 public class RenderSystem extends EntitySystem {
     // ECS
     private ImmutableArray<Entity> entities;
-    private ComponentMapper<ImageComponent> imageMapper = ComponentMapper.getFor(ImageComponent.class);
+    private ComponentMapper<RenderComponent> imageMapper = ComponentMapper.getFor(RenderComponent.class);
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
     // Render
@@ -43,7 +40,7 @@ public class RenderSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(ImageComponent.class, BodyComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(RenderComponent.class, BodyComponent.class).get());
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -69,7 +66,7 @@ public class RenderSystem extends EntitySystem {
         camera.update();
         spriteBatch.setTransformMatrix(camera.combined);
 
-        // todo: render background
+        // Background
         spriteBatch.begin();
         for (int i = 0; i < 100; i++) {
             Vector3 star = stars.get(i);
@@ -77,17 +74,34 @@ public class RenderSystem extends EntitySystem {
         }
         spriteBatch.end();
 
+        // Entities
         spriteBatch.begin();
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
-            ImageComponent image = imageMapper.get(entity);
             BodyComponent body = bodyMapper.get(entity);
+            RenderComponent image = imageMapper.get(entity);
 
+            // Animation
+            image.animationDeltaTime += deltaTime;
+            if(image.animationDeltaTime > image.timePerAnimation){
+                image.animationDeltaTime -= image.timePerAnimation;
+                image.animationIndex += 1;
+                if(image.animationIndex >= image.textures.length){
+                    if(image.repeatAnimation) {
+                        image.animationIndex = 0;
+                    } else {
+                        image.animationIndex -= 1;
+                    }
+                }
+            }
+
+            // Draw
             float halfWidth = body.width * 0.5f;
             float halfHeight = body.height * 0.5f;
             float rotation = body.direction.angle() - 90;
+
             spriteBatch.draw(
-                    image.texture,
+                    image.textures[image.animationIndex],
                     body.position.x * TILE_SIZE - halfWidth * TILE_SIZE,
                     body.position.y * TILE_SIZE + halfHeight * TILE_SIZE,
                     halfWidth * TILE_SIZE,

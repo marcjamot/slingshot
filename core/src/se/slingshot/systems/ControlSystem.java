@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import se.slingshot.components.ControllableComponent;
-import se.slingshot.components.ImageComponent;
 
 /**
  * Created by emanu on 2015-12-21.
