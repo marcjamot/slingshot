@@ -49,32 +49,65 @@ public class GameScreen implements Screen {
         };
         player.add(new RenderComponent(playerTextures, true, 0.5f));
         player.add(new BodyComponent(
-                new Vector2(3, 3),
+                new Vector2(9.5f, 15f),
                 new Vector2(1,0),
-                new Vector2(0,0),
-                2, 2,
-                1, 0.5f
+                new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),(float)Math.sqrt(GravitySystem.G*30 / 0.5)),
+                0.25f, 0.25f,
+                1, 0.1f
         ));
-        player.add(new ControllableComponent(180,2));
+        player.add(new ControllableComponent(180,1));
         player.add(new NoGravityComponent());
         player.add(new DeathComponent());
         engine.addEntity(player);
 
-        // Debug planet
-        Entity planet = new Entity();
-        Texture[] planetTextures = new Texture[]{
+        // Debug sun
+        Entity sun = new Entity();
+        Texture[] sunTextures = new Texture[]{
                 new Texture("sun.png")
         };
-        planet.add(new RenderComponent(planetTextures, false, 1.0f));
-        planet.add(new BodyComponent(
+        sun.add(new RenderComponent(sunTextures, false, 1.0f));
+        sun.add(new BodyComponent(
                 new Vector2(10, 10),
                 new Vector2(),
                 new Vector2(),
-                4, 4,
-                1000, 1.4f
+                1f, 1f,
+                80, 1.4f
         ));
-        planet.add(new GravityComponent());
+        sun.add(new FullGravityComponent());
+        engine.addEntity(sun);
+
+        // Debug planet
+        Entity planet = new Entity();
+        Texture[] planetTextures = new Texture[]{
+                new Texture("earth.png")
+        };
+        planet.add(new RenderComponent(planetTextures, false, 1.0f));
+        planet.add(new BodyComponent(
+                new Vector2(10, 20),
+                new Vector2(),
+                new Vector2((float)Math.sqrt(GravitySystem.G*80 / 10),0),
+                0.8f, 0.8f,
+                50, 1.4f
+        ));
+        planet.add(new HalfGravityComponent());
         engine.addEntity(planet);
+
+
+        // Debug planet
+        Entity planet2 = new Entity();
+        Texture[] planet2Textures = new Texture[]{
+                new Texture("earth.png")
+        };
+        planet2.add(new RenderComponent(planet2Textures, false, 1.0f));
+        planet2.add(new BodyComponent(
+                new Vector2(10, 15),
+                new Vector2(),
+                new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),0),
+                0.5f, 0.5f,
+                30, 1.4f
+        ));
+        planet2.add(new HalfGravityComponent());
+        engine.addEntity(planet2);
     }
 
     @Override
