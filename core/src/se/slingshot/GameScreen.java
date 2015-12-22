@@ -6,16 +6,13 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import net.engio.mbassy.bus.MBassador;
 import se.slingshot.components.*;
 import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ControllableComponent;
-import se.slingshot.components.DeathComponent;
+import se.slingshot.components.CollisionComponent;
 import se.slingshot.components.RenderComponent;
-import se.slingshot.systems.CollisionSystem;
-import se.slingshot.systems.ControlSystem;
-import se.slingshot.systems.GravitySystem;
-import se.slingshot.systems.MovementSystem;
-import se.slingshot.systems.RenderSystem;
+import se.slingshot.systems.*;
 
 /**
  * DESC
@@ -29,11 +26,14 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         engine = new PooledEngine();
+        MBassador<CollisionComponent> eventBus = new MBassador<CollisionComponent>();
 
-        CollisionSystem collisionSystem = new CollisionSystem();
+        CollisionSystem collisionSystem = new CollisionSystem(eventBus);
         engine.addSystem(collisionSystem);
         ControlSystem controlSystem = new ControlSystem();
         engine.addSystem(controlSystem);
+        DeathSystem deathSystem = new DeathSystem(eventBus);
+        engine.addSystem(deathSystem);
         GravitySystem gravitySystem = new GravitySystem();
         engine.addSystem(gravitySystem);
         MovementSystem movementSystem = new MovementSystem();
@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
         ));
         player.add(new ControllableComponent(180,2));
         player.add(new NoGravityComponent());
-        player.add(new DeathComponent());
+        player.add(new CollisionComponent(player));
         engine.addEntity(player);
 
         // Debug planet

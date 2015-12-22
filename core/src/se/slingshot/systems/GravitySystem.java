@@ -39,7 +39,6 @@ public class GravitySystem extends EntitySystem {
                 Vector2 gravityDir = new Vector2(gravityBody.position.x-noGravityBody.position.x, gravityBody.position.y-noGravityBody.position.y);
                 float distance = gravityDir.len();
                 float acceleration = (G * gravityBody.weight) / (distance * distance);
-                System.out.println("acc " + acceleration);
                 acceleration = Math.min(acceleration,MAX_ACC);
                 gravityDir.nor();
                 gravityDir.scl(acceleration * deltaTime);

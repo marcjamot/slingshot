@@ -79,18 +79,23 @@ public class RenderSystem extends EntitySystem {
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             BodyComponent body = bodyMapper.get(entity);
-            RenderComponent image = imageMapper.get(entity);
+            RenderComponent render = imageMapper.get(entity);
+
+            // Check if entity should be rendered
+            if (!render.visible) {
+                continue;
+            }
 
             // Animation
-            image.animationDeltaTime += deltaTime;
-            if(image.animationDeltaTime > image.timePerAnimation){
-                image.animationDeltaTime -= image.timePerAnimation;
-                image.animationIndex += 1;
-                if(image.animationIndex >= image.textures.length){
-                    if(image.repeatAnimation) {
-                        image.animationIndex = 0;
+            render.animationDeltaTime += deltaTime;
+            if (render.animationDeltaTime > render.timePerAnimation) {
+                render.animationDeltaTime -= render.timePerAnimation;
+                render.animationIndex += 1;
+                if (render.animationIndex >= render.textures.length) {
+                    if (render.repeatAnimation) {
+                        render.animationIndex = 0;
                     } else {
-                        image.animationIndex -= 1;
+                        render.animationIndex -= 1;
                     }
                 }
             }
@@ -101,19 +106,19 @@ public class RenderSystem extends EntitySystem {
             float rotation = body.direction.angle() - 90;
 
             spriteBatch.draw(
-                    image.textures[image.animationIndex],
+                    render.textures[render.animationIndex],
                     body.position.x * TILE_SIZE - halfWidth * TILE_SIZE,
                     body.position.y * TILE_SIZE - halfHeight * TILE_SIZE,
                     halfWidth * TILE_SIZE,
                     halfHeight * TILE_SIZE,
                     body.width * TILE_SIZE,
                     body.height * TILE_SIZE,
-                    1, 1, rotation, 0, 0, (int)TILE_SIZE, (int)TILE_SIZE, false, false);
+                    1, 1, rotation, 0, 0, (int) TILE_SIZE, (int) TILE_SIZE, false, false);
         }
         spriteBatch.end();
 
         // Debug draw
-        if(drawPointActive){
+        if (drawPointActive) {
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.setTransformMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -127,7 +132,8 @@ public class RenderSystem extends EntitySystem {
     private static float drawPointX;
     private static float drawPointY;
     private static float drawPointSize;
-    public static void drawPoint(float x, float y, float size){
+
+    public static void drawPoint(float x, float y, float size) {
         drawPointActive = true;
         drawPointX = x;
         drawPointY = y;
