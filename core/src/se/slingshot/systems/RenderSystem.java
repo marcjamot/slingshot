@@ -15,6 +15,7 @@ import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ControllableComponent;
 import se.slingshot.components.RenderComponent;
 import se.slingshot.gui.Gui;
+import se.slingshot.interfaces.RenderInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class RenderSystem extends EntitySystem {
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
     // Render
-    private final static float TILE_SIZE = 256;
+    private final static float PIXEL_PER_METER = 256;
 
     private OrthographicCamera camera;
     private SpriteBatch spriteBatch;
@@ -43,11 +44,14 @@ public class RenderSystem extends EntitySystem {
     private final Gui gui = new Gui();
     private final ControllableComponent controllableComponent;
 
+    private final RenderInterface[] renderInterfaces;
+
     /**
-     * @param controllableComponent Player controllable component for fuel level in gui
+     * @param fuelController Player controllable component for fuel level in gui
      */
-    public RenderSystem(ControllableComponent controllableComponent) {
-        this.controllableComponent = controllableComponent;
+    public RenderSystem(ControllableComponent fuelController, RenderInterface[] renderInterfaces) {
+        this.controllableComponent = fuelController;
+        this.renderInterfaces = renderInterfaces;
     }
 
     @Override
@@ -94,7 +98,7 @@ public class RenderSystem extends EntitySystem {
         spriteBatch.begin();
         for (int i = 0; i < 100; i++) {
             Vector3 star = stars.get(i);
-            spriteBatch.draw(starImage, star.x * TILE_SIZE, star.y * TILE_SIZE, star.z * TILE_SIZE, star.z * TILE_SIZE);
+            spriteBatch.draw(starImage, star.x * PIXEL_PER_METER, star.y * PIXEL_PER_METER, star.z * PIXEL_PER_METER, star.z * PIXEL_PER_METER);
         }
         spriteBatch.end();
 
@@ -131,15 +135,20 @@ public class RenderSystem extends EntitySystem {
 
             spriteBatch.draw(
                     render.textures[render.animationIndex],
-                    body.position.x * TILE_SIZE - halfWidth * TILE_SIZE,
-                    body.position.y * TILE_SIZE - halfHeight * TILE_SIZE,
-                    halfWidth * TILE_SIZE,
-                    halfHeight * TILE_SIZE,
-                    body.width * TILE_SIZE,
-                    body.height * TILE_SIZE,
-                    1, 1, rotation, 0, 0, (int) TILE_SIZE, (int) TILE_SIZE, false, false);
+                    body.position.x * PIXEL_PER_METER - halfWidth * PIXEL_PER_METER,
+                    body.position.y * PIXEL_PER_METER - halfHeight * PIXEL_PER_METER,
+                    halfWidth * PIXEL_PER_METER,
+                    halfHeight * PIXEL_PER_METER,
+                    body.width * PIXEL_PER_METER,
+                    body.height * PIXEL_PER_METER,
+                    1, 1, rotation, 0, 0, (int) PIXEL_PER_METER, (int) PIXEL_PER_METER, false, false);
         }
         spriteBatch.end();
+
+        gui.render(deltaTime);
+        for(RenderInterface renderInterface : renderInterfaces){
+            renderInterface.render(camera, spriteBatch, PIXEL_PER_METER);
+        }
 
         // Debug draw
         if (drawPointActive) {
@@ -147,11 +156,9 @@ public class RenderSystem extends EntitySystem {
             shapeRenderer.setTransformMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.circle(drawPointX * TILE_SIZE, drawPointY * TILE_SIZE, drawPointSize);
+            shapeRenderer.circle(drawPointX * PIXEL_PER_METER, drawPointY * PIXEL_PER_METER, drawPointSize);
             shapeRenderer.end();
         }
-
-        gui.render(deltaTime);
     }
 
     @Override
