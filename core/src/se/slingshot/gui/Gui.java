@@ -11,11 +11,12 @@ import se.slingshot.components.ControllableComponent;
  */
 public class Gui {
     private Stage stage;
+    private FuelBar fuelBar;
 
     public void create(ControllableComponent controllableComponent){
         stage = new Stage();
 
-        FuelBar fuelBar = new FuelBar(controllableComponent);
+        fuelBar = new FuelBar(controllableComponent);
         fuelBar.setPosition(0, 0);
         fuelBar.setSize(stage.getWidth(), stage.getHeight()/50);
         stage.addActor(fuelBar);
@@ -23,6 +24,7 @@ public class Gui {
 
     public void resize(int width, int height){
         stage.getViewport().update(width, height);
+        fuelBar.setSize(width, height / 50);
     }
 
     public void render(float delta){

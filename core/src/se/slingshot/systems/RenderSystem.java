@@ -54,9 +54,11 @@ public class RenderSystem extends EntitySystem {
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(RenderComponent.class, BodyComponent.class).get());
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        camera = new OrthographicCamera(30, 30 * (h / w));
+        gui.create(controllableComponent);
+        camera = new OrthographicCamera();
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+        resize(width, height);
         spriteBatch = new SpriteBatch();
 
         starImage = new Texture("star.png");
@@ -68,8 +70,16 @@ public class RenderSystem extends EntitySystem {
             Vector3 star = new Vector3(x, y, size);
             stars.add(i, star);
         }
+    }
 
-        gui.create(controllableComponent);
+    /**
+     * Screen resize
+     * @param width Screen width
+     * @param height Screen height
+     */
+    public void resize(int width, int height){
+        camera.setToOrtho(false, 30, 30);
+        gui.resize(width, height);
     }
 
     @Override
@@ -142,15 +152,6 @@ public class RenderSystem extends EntitySystem {
         }
 
         gui.render(deltaTime);
-    }
-
-    /**
-     * Screen resize
-     * @param width Screen width
-     * @param height Screen height
-     */
-    public void resize(int width, int height){
-        gui.resize(width, height);
     }
 
     @Override
