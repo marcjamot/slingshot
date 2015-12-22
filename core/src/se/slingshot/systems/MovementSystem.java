@@ -43,7 +43,7 @@ public class MovementSystem extends EntitySystem {
             BodyComponent body = bodyMapper.get(entity);
 
             Vector2 tmp = new Vector2(body.velocity);
-            body.position.add(tmp.scl(deltaTime*2));
+            body.position.add(tmp.scl(deltaTime));
         }
     }
 

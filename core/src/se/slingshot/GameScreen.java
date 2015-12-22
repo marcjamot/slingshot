@@ -28,7 +28,7 @@ public class GameScreen implements Screen {
     public void show() {
         engine = new PooledEngine();
         MBassador<CollisionComponent> eventBus = new MBassador<CollisionComponent>();
-        ControllableComponent playerControllableComponent = new ControllableComponent(180f,0.5f);
+        ControllableComponent playerControllableComponent = new ControllableComponent(180f,2f);
 
         CollisionSystem collisionSystem = new CollisionSystem(eventBus);
         engine.addSystem(collisionSystem);
@@ -40,6 +40,8 @@ public class GameScreen implements Screen {
         engine.addSystem(gravitySystem);
         MovementSystem movementSystem = new MovementSystem();
         engine.addSystem(movementSystem);
+        OrbitSystem orbitSystem = new OrbitSystem();
+        engine.addSystem(orbitSystem);
         renderSystem = new RenderSystem(playerControllableComponent);
         engine.addSystem(renderSystem);
 
@@ -51,11 +53,11 @@ public class GameScreen implements Screen {
         };
         player.add(new RenderComponent(playerTextures, true, 0.5f));
         player.add(new BodyComponent(
-                new Vector2(19f, 17f),
+                new Vector2(15f, 17f),
                 new Vector2(1,0),
                 new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),(float)Math.sqrt(GravitySystem.G*30 / 1)),
-                0.25f, 0.25f,
-                1, 0.1f
+                2f, 2f,
+                1, 0.8f
         ));
         player.add(playerControllableComponent);
         player.add(new NoGravityComponent());
@@ -67,15 +69,16 @@ public class GameScreen implements Screen {
         Texture[] sunTextures = new Texture[]{
                 new Texture("sun.png")
         };
+        Vector2 sunPossition = new Vector2(20, 12);
         sun.add(new RenderComponent(sunTextures, false, 1.0f));
         sun.add(new BodyComponent(
-                new Vector2(20, 12),
+                sunPossition,
                 new Vector2(),
                 new Vector2(),
-                1f, 1f,
-                80, 0.5f
+                4f, 4f,
+                100, 2f
         ));
-        sun.add(new FullGravityComponent());
+        sun.add(new GravityComponent());
         engine.addEntity(sun);
 
         // Debug planet
@@ -87,11 +90,12 @@ public class GameScreen implements Screen {
         planet.add(new BodyComponent(
                 new Vector2(20, 22),
                 new Vector2(),
-                new Vector2((float)Math.sqrt(GravitySystem.G*80 / 10),0),
-                0.8f, 0.8f,
-                50, 0.4f
+                new Vector2(),
+                3f, 3f,
+                60, 1.5f
         ));
-        planet.add(new HalfGravityComponent());
+        planet.add(new GravityComponent());
+        planet.add(new OrbitComponent(sunPossition,10,45,10));
         engine.addEntity(planet);
 
 
@@ -104,11 +108,11 @@ public class GameScreen implements Screen {
         planet2.add(new BodyComponent(
                 new Vector2(20, 17),
                 new Vector2(),
-                new Vector2((float)Math.sqrt(GravitySystem.G*80 / 5),0),
-                0.5f, 0.5f,
-                30, 0.25f
+                new Vector2(),
+                2f, 2f,
+                40, 1f
         ));
-        planet2.add(new HalfGravityComponent());
+        planet2.add(new GravityComponent());
         engine.addEntity(planet2);
     }
 
