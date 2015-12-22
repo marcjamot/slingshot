@@ -40,10 +40,10 @@ public class ControlSystem extends EntitySystem implements InputProcessor {
             }
             float directionThrust = 0;
             if (leftThrust) {
-                directionThrust -= 1;
+                directionThrust += 1;
             }
             if (rightThrust) {
-                directionThrust += 1;
+                directionThrust -= 1;
             }
             control.directionThrust = control.directionThrustSpeed * directionThrust;
         }

@@ -30,7 +30,7 @@ public class MovementSystem extends EntitySystem {
 
             body.direction.rotate(control.directionThrust * deltaTime);
             Vector2 tmp = new Vector2(body.direction);
-            body.velocity.add(tmp.scl(control.forwardThrust * deltaTime));
+            body.velocity.add(tmp.scl(control.forwardThrust/body.weight * deltaTime));
             tmp = new Vector2(body.velocity);
             body.position.add(tmp.scl(deltaTime));
         }
