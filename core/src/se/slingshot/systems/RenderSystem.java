@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import se.slingshot.components.BodyComponent;
+import se.slingshot.components.ControllableComponent;
 import se.slingshot.components.RenderComponent;
+import se.slingshot.gui.Gui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,16 @@ public class RenderSystem extends EntitySystem {
     private Texture starImage;
     private List<Vector3> stars;
 
+    private final Gui gui = new Gui();
+    private final ControllableComponent controllableComponent;
+
+    /**
+     * @param controllableComponent Player controllable component for fuel level in gui
+     */
+    public RenderSystem(ControllableComponent controllableComponent) {
+        this.controllableComponent = controllableComponent;
+    }
+
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(RenderComponent.class, BodyComponent.class).get());
@@ -56,6 +68,8 @@ public class RenderSystem extends EntitySystem {
             Vector3 star = new Vector3(x, y, size);
             stars.add(i, star);
         }
+
+        gui.create(controllableComponent);
     }
 
     @Override
@@ -126,6 +140,23 @@ public class RenderSystem extends EntitySystem {
             shapeRenderer.circle(drawPointX * TILE_SIZE, drawPointY * TILE_SIZE, drawPointSize);
             shapeRenderer.end();
         }
+
+        gui.render(deltaTime);
+    }
+
+    /**
+     * Screen resize
+     * @param width Screen width
+     * @param height Screen height
+     */
+    public void resize(int width, int height){
+        gui.resize(width, height);
+    }
+
+    @Override
+    public void removedFromEngine(Engine engine) {
+        gui.dispose();
+        spriteBatch.dispose();
     }
 
     private static boolean drawPointActive;

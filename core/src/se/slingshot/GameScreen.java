@@ -22,11 +22,13 @@ import se.slingshot.systems.*;
  */
 public class GameScreen implements Screen {
     private Engine engine;
+    private RenderSystem renderSystem;
 
     @Override
     public void show() {
         engine = new PooledEngine();
         MBassador<CollisionComponent> eventBus = new MBassador<CollisionComponent>();
+        ControllableComponent playerControllableComponent = new ControllableComponent(180,2);
 
         CollisionSystem collisionSystem = new CollisionSystem(eventBus);
         engine.addSystem(collisionSystem);
@@ -38,7 +40,7 @@ public class GameScreen implements Screen {
         engine.addSystem(gravitySystem);
         MovementSystem movementSystem = new MovementSystem();
         engine.addSystem(movementSystem);
-        RenderSystem renderSystem = new RenderSystem();
+        renderSystem = new RenderSystem(playerControllableComponent);
         engine.addSystem(renderSystem);
 
         // Debug init data
@@ -55,7 +57,7 @@ public class GameScreen implements Screen {
                 2, 2,
                 1, 0.5f
         ));
-        player.add(new ControllableComponent(180,2));
+        player.add(playerControllableComponent);
         player.add(new NoGravityComponent());
         player.add(new CollisionComponent(player));
         engine.addEntity(player);
@@ -84,7 +86,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        renderSystem.resize(width, height);
     }
 
     @Override
