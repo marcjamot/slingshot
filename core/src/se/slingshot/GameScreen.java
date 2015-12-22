@@ -7,7 +7,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ControllableComponent;
+import se.slingshot.components.DeathComponent;
 import se.slingshot.components.ImageComponent;
+import se.slingshot.systems.CollisionSystem;
 import se.slingshot.systems.ControlSystem;
 import se.slingshot.systems.MovementSystem;
 import se.slingshot.systems.RenderSystem;
@@ -25,6 +27,8 @@ public class GameScreen implements Screen {
     public void show() {
         engine = new PooledEngine();
 
+        CollisionSystem collisionSystem = new CollisionSystem();
+        engine.addSystem(collisionSystem);
         ControlSystem controlSystem = new ControlSystem();
         engine.addSystem(controlSystem);
         MovementSystem movementSystem = new MovementSystem();
@@ -43,6 +47,7 @@ public class GameScreen implements Screen {
                 0
         ));
         player.add(new ControllableComponent(0,0));
+        player.add(new DeathComponent());
         engine.addEntity(player);
 
         // Debug planet
