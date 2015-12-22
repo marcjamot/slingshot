@@ -64,8 +64,8 @@ public class RenderSystem extends EntitySystem {
         starImage = new Texture("star.png");
         stars = new ArrayList<Vector3>(100);
         for (int i = 0; i < 100; i++) {
-            float x = MathUtils.random(0.0f, 20.0f);
-            float y = MathUtils.random(0.0f, 20.0f);
+            float x = MathUtils.random(0.0f, 60.0f);
+            float y = MathUtils.random(0.0f, 30.0f);
             float size = MathUtils.random(0.0f, 0.1f);
             Vector3 star = new Vector3(x, y, size);
             stars.add(i, star);
