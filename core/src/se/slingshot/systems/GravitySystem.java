@@ -57,7 +57,7 @@ public class GravitySystem extends EntitySystem {
                 float acceleration = (G * body2.weight) / (distance * distance);
                 acceleration = Math.min(acceleration,MAX_ACC);
                 gravityDir.nor();
-                gravityDir.scl(acceleration * deltaTime);
+                gravityDir.scl(acceleration * deltaTime*2);
                 body1.velocity.add(gravityDir);
 
             }
