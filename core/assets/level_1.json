@@ -1,0 +1,81 @@
+[
+  {
+    "body": {
+      "start_x": 15.0,
+      "start_y": 17.0,
+      "direction_x": 1.0,
+      "direction_y": 1.0,
+      "velocity_x": 1.672,
+      "velocity_y": 2.01,
+      "height": 2.0,
+      "width": 2.0,
+      "weight": 1.0,
+      "radius": 0.8
+    },
+    "collision": true,
+    "controllable": {
+      "forward_force": 2.0,
+      "direction_speed": 180.0
+    },
+    "gravity": false,
+    "render": {
+      "images": [
+        "spaceship_fire.png",
+        "spaceship_fire_2.png"
+      ],
+      "repeat_animation": true,
+      "animation_speed": 0.5
+    }
+  },
+  {
+    "id": "sun",
+    "body": {
+      "start_x": 20.0,
+      "start_y": 12.0,
+      "direction_x": 0.0,
+      "direction_y": 0.0,
+      "velocity_x": 0.0,
+      "velocity_y": 0.0,
+      "height": 4.0,
+      "width": 4.0,
+      "weight": 100.0,
+      "radius": 2.0
+    },
+    "gravity": true,
+    "render": {
+      "images": [
+        "sun.png"
+      ],
+      "repeat_animation": false,
+      "animation_speed": 1.0
+    }
+  },
+  {
+    "body": {
+      "start_x": 20.0,
+      "start_y": 22.0,
+      "direction_x": 0.0,
+      "direction_y": 0.0,
+      "velocity_x": 0.0,
+      "velocity_y": 0.0,
+      "height": 3.0,
+      "width": 3.0,
+      "weight": 60.0,
+      "radius": 1.5
+    },
+    "gravity": true,
+    "orbit": {
+      "id": "sun",
+      "distance": 10.0,
+      "angle": 45.0,
+      "speed": 20.0
+    },
+    "render": {
+      "images": [
+        "earth.png"
+      ],
+      "repeat_animation": false,
+      "animation_speed": 1.0
+    }
+  }
+]
