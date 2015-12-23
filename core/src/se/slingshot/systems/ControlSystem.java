@@ -9,7 +9,10 @@ import se.slingshot.components.ControllableComponent;
 import se.slingshot.interfaces.FuelInterface;
 
 /**
- * Created by emanu on 2015-12-21.
+ * System for user control input
+ *
+ * @author emanu
+ * @since 2015-12
  */
 public class ControlSystem extends EntitySystem implements InputProcessor, FuelInterface {
     // ECS
@@ -36,7 +39,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
 
             fuel = control.fuel;
             // If we have no fuel, we can't move the ship
-            if(control.fuel == 0){
+            if (control.fuel == 0) {
                 control.directionThrust = 0;
                 control.forwardThrust = 0;
                 continue;
@@ -58,9 +61,9 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
             control.directionThrust = control.directionThrustSpeed * directionThrust;
 
             // Add thruster active time for fuel consumption
-            if(forwardThrust){
+            if (forwardThrust) {
                 control.fuel -= deltaTime * 0.1f;
-                if(control.fuel < 0){
+                if (control.fuel < 0) {
                     control.fuel = 0;
                 }
             }

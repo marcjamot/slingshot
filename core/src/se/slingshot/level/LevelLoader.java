@@ -112,7 +112,7 @@ public class LevelLoader {
                 );
             case "trajectory":
                 return new TrajectoryComponent(
-                        (int) (long)value
+                        (int) (long) value
                 );
             default:
                 throw new IllegalArgumentException("Can't find component: " + key);

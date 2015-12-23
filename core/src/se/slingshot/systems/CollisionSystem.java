@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -34,7 +33,7 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
 
     /**
      * @param eventBus EventBus is used to pass messages between systems conveniently
-     * @param debug If collision circles should be drawn
+     * @param debug    If collision circles should be drawn
      */
     public CollisionSystem(MBassador<CollisionComponent> eventBus, boolean debug) {
         this.eventBus = eventBus;
@@ -56,7 +55,7 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
 
             for (int j = 0; j < bodyEntities.size(); j++) {
                 Entity bodyEntity = bodyEntities.get(j);
-                if(collisionEntity == bodyEntity)
+                if (collisionEntity == bodyEntity)
                     continue;
                 BodyComponent bBody = bodyMapper.get(bodyEntity);
 
@@ -65,7 +64,7 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
                 Vector2 b2 = new Vector2(cBody.position);
                 float distance = b1.dst(b2);
                 float radiusDistance = cBody.radius + bBody.radius;
-                if(distance < radiusDistance) {
+                if (distance < radiusDistance) {
                     /** Tell all interested systems that the collision occurred */
                     eventBus.post(cCollision).now();
                 }
@@ -75,7 +74,7 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
 
     @Override
     public void render(Camera camera, SpriteBatch spriteBatch, float pixelPerMeter) {
-        if(debug) {
+        if (debug) {
             for (int i = 0; i < bodyEntities.size(); i++) {
                 Entity entity = bodyEntities.get(i);
                 BodyComponent body = bodyMapper.get(entity);

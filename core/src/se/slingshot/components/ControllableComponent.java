@@ -3,7 +3,10 @@ package se.slingshot.components;
 import com.badlogic.ashley.core.Component;
 
 /**
- * Created by emanu on 2015-12-21.
+ * Entity is being controlled by player
+ *
+ * @author emanu
+ * @since 2015-12
  */
 public class ControllableComponent implements Component {
     public float directionThrust;

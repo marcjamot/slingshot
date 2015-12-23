@@ -4,7 +4,10 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Created by emanu on 2015-12-21.
+ * All entities have a body, basics for physics and rendering
+ *
+ * @author emanu
+ * @since 2015-12
  */
 public class BodyComponent implements Component {
     public Vector2 position;

@@ -5,7 +5,10 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import se.slingshot.components.GoalAreaComponent;
 
 /**
- * Created by emanu on 2015-12-22.
+ * Handles win condition
+ *
+ * @author emanu
+ * @since 2015-12
  */
 public class WinConditionSystem extends EntitySystem {
     // ECS
@@ -25,7 +28,7 @@ public class WinConditionSystem extends EntitySystem {
             GoalAreaComponent goalArea = goalAreaMapper.get(entity);
 
             float distance = goalArea.position.dst(goalArea.objectPosition);
-            if(distance<=goalArea.radius){
+            if (distance <= goalArea.radius) {
                 System.out.println("Winning");
             }
         }

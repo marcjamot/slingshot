@@ -169,6 +169,7 @@ public class RenderSystem extends EntitySystem {
     private static float drawPointY;
     private static float drawPointSize;
 
+    @SuppressWarnings("unused")
     public static void drawPoint(float x, float y, float size) {
         drawPointActive = true;
         drawPointX = x;

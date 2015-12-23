@@ -5,13 +5,12 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import net.engio.mbassy.bus.MBassador;
 import se.slingshot.components.CollisionComponent;
-import se.slingshot.components.ControllableComponent;
 import se.slingshot.interfaces.RenderInterface;
 import se.slingshot.level.LevelLoader;
 import se.slingshot.systems.*;
 
 /**
- * DESC
+ * Screen when a level is loaded and in game
  *
  * @author Marc
  * @since 2015-12

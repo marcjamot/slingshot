@@ -8,7 +8,10 @@ import se.slingshot.components.BodyComponent;
 import se.slingshot.components.OrbitComponent;
 
 /**
- * Created by emanu on 2015-12-22.
+ * Handles orbiting of entities
+ *
+ * @author emanu
+ * @since 2015-12
  */
 public class OrbitSystem extends EntitySystem {
     // ECS
@@ -29,9 +32,9 @@ public class OrbitSystem extends EntitySystem {
             OrbitComponent orbit = orbitMapper.get(entity);
             BodyComponent body = bodyMapper.get(entity);
 
-            orbit.angle = orbit.angle + orbit.speed*deltaTime;
+            orbit.angle = orbit.angle + orbit.speed * deltaTime;
             Vector2 tmp = new Vector2(orbit.center);
-            body.position.set(tmp.add(MathUtils.cosDeg(orbit.angle)*orbit.distance, MathUtils.sinDeg(orbit.angle)*orbit.distance));
+            body.position.set(tmp.add(MathUtils.cosDeg(orbit.angle) * orbit.distance, MathUtils.sinDeg(orbit.angle) * orbit.distance));
 
         }
     }

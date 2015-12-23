@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 
 /**
- * DESC
+ * Handles collision events
  *
  * @author Marc
  * @since 2015-12

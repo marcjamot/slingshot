@@ -1,24 +1,22 @@
 package se.slingshot.systems;
 
-import com.badlogic.ashley.core.*;
-import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
-import se.slingshot.components.BodyComponent;
 import se.slingshot.components.CollisionComponent;
 import se.slingshot.components.RenderComponent;
 
 /**
- * DESC
+ * Handles entities that dies
  *
  * @author Marc
  * @since 2015-12
  */
 public class DeathSystem extends EntitySystem {
     // ECS
-    private ImmutableArray<Entity> entities;
-    private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
-    private ComponentMapper<CollisionComponent> collisionMapper = ComponentMapper.getFor(CollisionComponent.class);
     private ComponentMapper<RenderComponent> renderMapper = ComponentMapper.getFor(RenderComponent.class);
 
     // Death
@@ -34,8 +32,6 @@ public class DeathSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(RenderComponent.class, BodyComponent.class).get());
-
         /** Receive collisions */
         eventBus.subscribe(this);
     }
@@ -46,10 +42,12 @@ public class DeathSystem extends EntitySystem {
 
     /**
      * Called when a collision occurs with the help of eventBus
+     *
      * @param collision Collision component
      */
     @Handler
-    public void handle(CollisionComponent collision){
+    @SuppressWarnings("unused")
+    public void handle(CollisionComponent collision) {
         Entity entity = collision.entity;
         RenderComponent render = renderMapper.get(entity);
         render.visible = false;

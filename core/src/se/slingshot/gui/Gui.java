@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import se.slingshot.interfaces.FuelInterface;
 
 /**
- * In-game gui
+ * In-game gui. Renders all static graphics.
  *
  * @author Marc
  * @since 2015-12

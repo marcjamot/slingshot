@@ -15,7 +15,10 @@ import se.slingshot.interfaces.RenderInterface;
 import java.util.ArrayList;
 
 /**
- * Created by emanu on 2015-12-23.
+ * Handles trajectory calculation and rendering
+ *
+ * @author emanu
+ * @since 2015-12
  */
 public class TrajectorySystem extends EntitySystem implements RenderInterface {
 
@@ -63,7 +66,7 @@ public class TrajectorySystem extends EntitySystem implements RenderInterface {
                 }
 
                 Vector2 tmp = new Vector2(velocity);
-                position.add(tmp.scl(j*timestepTime));
+                position.add(tmp.scl(j * timestepTime));
 
                 trajectory.trajectory.get(j).set(position);
             }
@@ -85,7 +88,7 @@ public class TrajectorySystem extends EntitySystem implements RenderInterface {
                 shapeRenderer.setTransformMatrix(camera.combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(Color.WHITE);
-                shapeRenderer.circle(position.x * pixelPerMeter, position.y * pixelPerMeter, (0.11f - 0.01f*j) * pixelPerMeter);
+                shapeRenderer.circle(position.x * pixelPerMeter, position.y * pixelPerMeter, (0.11f - 0.01f * j) * pixelPerMeter);
                 shapeRenderer.end();
             }
 

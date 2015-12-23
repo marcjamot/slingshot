@@ -6,9 +6,12 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 
 /**
- * Created by emanu on 2015-12-23.
+ * Entity has a trajectory displayed
+ *
+ * @author emanu
+ * @since 2015-12
  */
-public class TrajectoryComponent implements Component{
+public class TrajectoryComponent implements Component {
 
     public ArrayList<Vector2> trajectory;
 

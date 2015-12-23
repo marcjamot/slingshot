@@ -1,7 +1,7 @@
 package se.slingshot.interfaces;
 
 /**
- * DESC
+ * Retrieves the current fuel level
  *
  * @author Marc
  * @since 2015-12
