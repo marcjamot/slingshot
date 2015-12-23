@@ -1,17 +1,11 @@
 package se.slingshot;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import net.engio.mbassy.bus.MBassador;
-import se.slingshot.components.*;
-import se.slingshot.components.BodyComponent;
-import se.slingshot.components.ControllableComponent;
 import se.slingshot.components.CollisionComponent;
-import se.slingshot.components.RenderComponent;
+import se.slingshot.components.ControllableComponent;
 import se.slingshot.interfaces.RenderInterface;
 import se.slingshot.level.LevelLoader;
 import se.slingshot.systems.*;
@@ -29,7 +23,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         engine = new PooledEngine();
-        MBassador<CollisionComponent> eventBus = new MBassador<CollisionComponent>();
+        MBassador<CollisionComponent> eventBus = new MBassador<>();
         ControllableComponent playerControllableComponent = new ControllableComponent(180f,1.5f);
 
         CollisionSystem collisionSystem = new CollisionSystem(eventBus, true);
@@ -38,8 +32,10 @@ public class GameScreen implements Screen {
         GravitySystem gravitySystem = new GravitySystem();
         MovementSystem movementSystem = new MovementSystem();
         OrbitSystem orbitSystem = new OrbitSystem();
+        TrajectorySystem trajectorySystem = new TrajectorySystem();
         RenderInterface[] renderInterfaces = new RenderInterface[]{
-                collisionSystem
+                collisionSystem,
+                trajectorySystem
         };
         renderSystem = new RenderSystem(playerControllableComponent, renderInterfaces);
         WinConditionSystem winConditionSystem = new WinConditionSystem();
@@ -52,6 +48,7 @@ public class GameScreen implements Screen {
         engine.addSystem(collisionSystem);
         engine.addSystem(deathSystem);
         engine.addSystem(winConditionSystem);
+        engine.addSystem(trajectorySystem);
         engine.addSystem(renderSystem);
 
         new LevelLoader().from(engine, "level_1.json");

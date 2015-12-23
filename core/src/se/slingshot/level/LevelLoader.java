@@ -68,6 +68,17 @@ public class LevelLoader {
                         (float) (double) controllable.get("direction_speed"),
                         (float) (double) controllable.get("forward_force")
                 );
+            case "goal_area":
+                Map<String, Object> goalArea = (Map<String, Object>) value;
+                String goalAreaId = (String) goalArea.get("id");
+                Entity goalAreaEntity = entityMap.get(goalAreaId);
+                BodyComponent goalAreaBody = bodyMapper.get(goalAreaEntity);
+
+                return new GoalAreaComponent(
+                        new Vector2((float) (double) goalArea.get("position_x"), (float) (double) goalArea.get("position_y")),
+                        (float) (double) goalArea.get("radius"),
+                        goalAreaBody.position
+                );
             case "gravity":
                 boolean gravity = (boolean) value;
                 if (gravity) {
@@ -77,12 +88,12 @@ public class LevelLoader {
                 }
             case "orbit":
                 Map<String, Object> orbit = (Map<String, Object>) value;
-                String targetId = (String) orbit.get("id");
-                Entity target = entityMap.get(targetId);
-                BodyComponent targetBody = bodyMapper.get(target);
+                String orbitId = (String) orbit.get("id");
+                Entity orbitEntity = entityMap.get(orbitId);
+                BodyComponent orbitBody = bodyMapper.get(orbitEntity);
 
                 return new OrbitComponent(
-                        targetBody.position,
+                        orbitBody.position,
                         (float) (double) orbit.get("distance"),
                         (float) (double) orbit.get("angle"),
                         (float) (double) orbit.get("speed")
@@ -98,6 +109,10 @@ public class LevelLoader {
                         textures,
                         (boolean) render.get("repeat_animation"),
                         (float) (double) render.get("animation_speed")
+                );
+            case "trajectory":
+                return new TrajectoryComponent(
+                        (int) (long)value
                 );
             default:
                 throw new IllegalArgumentException("Can't find component: " + key);
