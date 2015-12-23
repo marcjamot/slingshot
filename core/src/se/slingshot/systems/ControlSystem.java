@@ -6,11 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import se.slingshot.components.ControllableComponent;
+import se.slingshot.interfaces.FuelInterface;
 
 /**
  * Created by emanu on 2015-12-21.
  */
-public class ControlSystem extends EntitySystem implements InputProcessor {
+public class ControlSystem extends EntitySystem implements InputProcessor, FuelInterface {
     // ECS
     private ImmutableArray<Entity> entities;
     private ComponentMapper<ControllableComponent> controlableMapper = ComponentMapper.getFor(ControllableComponent.class);
@@ -19,8 +20,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor {
     private boolean forwardThrust = false;
     private boolean leftThrust = false;
     private boolean rightThrust = false;
-
-
+    private float fuel;
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -34,6 +34,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor {
             Entity entity = entities.get(i);
             ControllableComponent control = controlableMapper.get(entity);
 
+            fuel = control.fuel;
             // If we have no fuel, we can't move the ship
             if(control.fuel == 0){
                 control.directionThrust = 0;
@@ -126,5 +127,10 @@ public class ControlSystem extends EntitySystem implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    @Override
+    public float get() {
+        return fuel;
     }
 }

@@ -24,7 +24,6 @@ public class GameScreen implements Screen {
     public void show() {
         engine = new PooledEngine();
         MBassador<CollisionComponent> eventBus = new MBassador<>();
-        ControllableComponent playerControllableComponent = new ControllableComponent(180f,1.5f);
 
         CollisionSystem collisionSystem = new CollisionSystem(eventBus, true);
         ControlSystem controlSystem = new ControlSystem();
@@ -37,7 +36,7 @@ public class GameScreen implements Screen {
                 collisionSystem,
                 trajectorySystem
         };
-        renderSystem = new RenderSystem(playerControllableComponent, renderInterfaces);
+        renderSystem = new RenderSystem(renderInterfaces, controlSystem);
         WinConditionSystem winConditionSystem = new WinConditionSystem();
 
         // Add the systems in the order they should execute

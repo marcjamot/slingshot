@@ -4,19 +4,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import se.slingshot.components.ControllableComponent;
+import se.slingshot.interfaces.FuelInterface;
 
 /**
- * DESC
+ * Actor for showing the fuel level
  *
  * @author Marc
  * @since 2015-12
  */
 public class FuelBar extends Actor {
-    private final ControllableComponent controllableComponent;
+    private final FuelInterface fuel;
 
-    public FuelBar(ControllableComponent controllableComponent) {
-        this.controllableComponent = controllableComponent;
+    public FuelBar(FuelInterface fuel) {
+        this.fuel = fuel;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class FuelBar extends Actor {
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(getX(), getY(), getWidth() * controllableComponent.fuel, getHeight());
+        shapeRenderer.rect(getX(), getY(), getWidth() * fuel.get(), getHeight());
         shapeRenderer.end();
     }
 }
