@@ -43,13 +43,16 @@ public class GameScreen implements Screen {
         engine.addSystem(movementSystem);
         OrbitSystem orbitSystem = new OrbitSystem();
         engine.addSystem(orbitSystem);
+        TrajectorySystem trajectorySystem = new TrajectorySystem();
+        engine.addSystem(trajectorySystem);
+        WinConditionSystem winConditionSystem = new WinConditionSystem();
+        engine.addSystem(winConditionSystem);
         RenderInterface[] renderInterfaces = new RenderInterface[]{
-                collisionSystem
+                collisionSystem,
+                trajectorySystem
         };
         renderSystem = new RenderSystem(playerControllableComponent, renderInterfaces);
         engine.addSystem(renderSystem);
-        WinConditionSystem winConditionSystem = new WinConditionSystem();
-        engine.addSystem(winConditionSystem);
 
 
         // Debug init data
@@ -65,11 +68,12 @@ public class GameScreen implements Screen {
                 new Vector2(1,0),
                 new Vector2(),
                 2f, 2f,
-                1, 0.8f
+                1, 0.6f
         ));
         player.add(playerControllableComponent);
         player.add(new NoGravityComponent());
         player.add(new CollisionComponent(player));
+        player.add(new TrajectoryComponent(10));
         engine.addEntity(player);
 
         // Debug sun
@@ -84,7 +88,7 @@ public class GameScreen implements Screen {
                 new Vector2(),
                 new Vector2(),
                 5f, 5f,
-                400, 2.5f
+                400, 2.2f
         ));
         sun.add(new GravityComponent());
         engine.addEntity(sun);
@@ -100,7 +104,7 @@ public class GameScreen implements Screen {
                 new Vector2(),
                 new Vector2(),
                 4f, 4f,
-                200, 2f
+                200, 1.8f
         ));
         planet.add(new GravityComponent());
         planet.add(new OrbitComponent(sunPossition,10,45,20));
@@ -117,13 +121,17 @@ public class GameScreen implements Screen {
                 new Vector2(),
                 new Vector2(),
                 3f, 3f,
-                150, 1.5f
+                150, 1.2f
         ));
         planet2.add(new GravityComponent());
         engine.addEntity(planet2);
 
         //Debug goal area
         Entity goalArea = new Entity();
+        Texture[] goalAreaTextures = new Texture[]{
+                new Texture("win_dotted.png")
+        };
+        goalArea.add(new RenderComponent(planet2Textures, false, 1.0f));
         goalArea.add(new GoalAreaComponent(
                 new Vector2(40f,20f),
                 5f,

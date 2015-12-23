@@ -13,7 +13,7 @@ import se.slingshot.components.NoGravityComponent;
 public class GravitySystem extends EntitySystem {
     // ECS
     public final static float G = 0.0667f;
-    private final static float MAX_ACC = 10f;
+    public final static float MAX_ACC = 10f;
     private ImmutableArray<Entity> noGravityEntities;
     private ImmutableArray<Entity> gravityEntities;
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
@@ -38,7 +38,8 @@ public class GravitySystem extends EntitySystem {
                 Entity gravityEntity = gravityEntities.get(j);
                 BodyComponent gravityBody = bodyMapper.get(gravityEntity);
 
-                Vector2 gravityDir = new Vector2(gravityBody.position.x - noGravityBody.position.x, gravityBody.position.y - noGravityBody.position.y);
+                Vector2 gravityDir = new Vector2(gravityBody.position);
+                gravityDir.sub(noGravityBody.position);
                 float distance = gravityDir.len();
                 float acceleration = (G * gravityBody.weight) / (distance * distance);
                 acceleration = Math.min(acceleration, MAX_ACC);
