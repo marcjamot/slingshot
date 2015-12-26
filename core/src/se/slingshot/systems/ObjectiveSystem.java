@@ -10,12 +10,15 @@ import se.slingshot.components.ObjectiveComponent;
  */
 public class ObjectiveSystem extends EntitySystem {
     // ECS
+    private Engine engine;
     private ImmutableArray<Entity> entities;
     private ComponentMapper<ObjectiveComponent> objectiveMapper = ComponentMapper.getFor(ObjectiveComponent.class);
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
+
     @Override
     public void addedToEngine(Engine engine) {
+        this.engine = engine;
         entities = engine.getEntitiesFor(Family.all(ObjectiveComponent.class).get());
     }
 
@@ -26,14 +29,11 @@ public class ObjectiveSystem extends EntitySystem {
             Entity entity = entities.get(i);
             ObjectiveComponent objective = objectiveMapper.get(entity);
             BodyComponent objectiveBody = bodyMapper.get(entity);
-
-            if(!objective.taken){
-                System.out.println("not taken");
-                float distance = objectiveBody.position.dst(objective.objectPosition);
-                if(distance<=objectiveBody.radius) {
-                    System.out.println("objective taken");
-                    objective.taken = true;
-                }
+            
+            float distance = objectiveBody.position.dst(objective.objectPosition);
+            if(distance<=objectiveBody.radius) {
+                System.out.println("objective taken");
+                engine.removeEntity(entity);
             }
         }
     }

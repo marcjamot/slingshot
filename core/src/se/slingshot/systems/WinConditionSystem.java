@@ -17,7 +17,6 @@ public class WinConditionSystem extends EntitySystem {
     private ImmutableArray<Entity> goalAreaEntities;
     private ImmutableArray<Entity> objectiveEntities;
     private ComponentMapper<GoalAreaComponent> goalAreaMapper = ComponentMapper.getFor(GoalAreaComponent.class);
-    private ComponentMapper<ObjectiveComponent> objectiveMapper = ComponentMapper.getFor(ObjectiveComponent.class);
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
     @Override
@@ -35,20 +34,8 @@ public class WinConditionSystem extends EntitySystem {
             BodyComponent goalAreaBody = bodyMapper.get(goalAreaEntity);
 
             float distance = goalAreaBody.position.dst(goalArea.objectPosition);
-            if(distance<=goalAreaBody.radius){
-                boolean gotAllObjectives = true;
-                for (int j = 0; j < objectiveEntities.size(); j++) {
-                    Entity objectiveEntity = objectiveEntities.get(i);
-                    ObjectiveComponent objective = objectiveMapper.get(objectiveEntity);
-
-                    if(!objective.taken){
-                        gotAllObjectives = false;
-                        break;
-                    }
-                }
-                if(gotAllObjectives){
-                    System.out.println("Win!");
-                }
+            if(distance<=goalAreaBody.radius  && objectiveEntities.size() == 0){
+                System.out.println("Win!");
             }
         }
     }
