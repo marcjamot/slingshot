@@ -7,7 +7,10 @@ import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ControllableComponent;
 
 /**
- * Created by emanu on 2015-12-21.
+ * Handles movement of entities
+ *
+ * @author emanu
+ * @since 2015-12
  */
 public class MovementSystem extends EntitySystem {
     // ECS
@@ -33,7 +36,7 @@ public class MovementSystem extends EntitySystem {
 
             body.direction.rotate(control.directionThrust * deltaTime);
             Vector2 tmp = new Vector2(body.direction);
-            tmp.scl(control.forwardThrust/body.weight * deltaTime);
+            tmp.scl(control.forwardThrust / body.weight * deltaTime);
             body.velocity.add(tmp);
         }
 

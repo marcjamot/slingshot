@@ -1,16 +1,17 @@
 package se.slingshot.systems;
 
-import com.badlogic.ashley.core.*;
-import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
-import se.slingshot.components.BodyComponent;
 import se.slingshot.components.CollisionComponent;
 import se.slingshot.components.KillableComponent;
 import se.slingshot.components.RenderComponent;
 
 /**
- * DESC
+ * Handles entities that dies
  *
  * @author Marc
  * @since 2015-12
@@ -33,7 +34,6 @@ public class DeathSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-
         /** Receive collisions */
         eventBus.subscribe(this);
     }
@@ -44,10 +44,12 @@ public class DeathSystem extends EntitySystem {
 
     /**
      * Called when a collision occurs with the help of eventBus
+     *
      * @param collision Collision component
      */
     @Handler
-    public void handle(CollisionComponent collision){
+    @SuppressWarnings("unused")
+    public void handle(CollisionComponent collision) {
         Entity entity = collision.entity;
         if(killableMapper.get(entity) != null){
             RenderComponent render = renderMapper.get(entity);

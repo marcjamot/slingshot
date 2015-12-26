@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * DESC
+ * Allows other systems to render using the RenderSystem
  *
  * @author Marc
  * @since 2015-12

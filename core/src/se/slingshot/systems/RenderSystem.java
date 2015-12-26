@@ -12,9 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import se.slingshot.components.BodyComponent;
-import se.slingshot.components.ControllableComponent;
 import se.slingshot.components.RenderComponent;
 import se.slingshot.gui.Gui;
+import se.slingshot.interfaces.FuelInterface;
 import se.slingshot.interfaces.RenderInterface;
 
 import java.util.ArrayList;
@@ -42,23 +42,19 @@ public class RenderSystem extends EntitySystem {
     private List<Vector3> stars;
 
     private final Gui gui = new Gui();
-    private final ControllableComponent controllableComponent;
-
+    private final FuelInterface fuel;
     private final RenderInterface[] renderInterfaces;
 
-    /**
-     * @param fuelController Player controllable component for fuel level in gui
-     */
-    public RenderSystem(ControllableComponent fuelController, RenderInterface[] renderInterfaces) {
-        this.controllableComponent = fuelController;
+    public RenderSystem(RenderInterface[] renderInterfaces, FuelInterface fuel) {
         this.renderInterfaces = renderInterfaces;
+        this.fuel = fuel;
     }
 
     @Override
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(RenderComponent.class, BodyComponent.class).get());
 
-        gui.create(controllableComponent);
+        gui.create(fuel);
         camera = new OrthographicCamera();
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
@@ -66,7 +62,7 @@ public class RenderSystem extends EntitySystem {
         spriteBatch = new SpriteBatch();
 
         starImage = new Texture("star.png");
-        stars = new ArrayList<Vector3>(100);
+        stars = new ArrayList<>(100);
         for (int i = 0; i < 100; i++) {
             float x = MathUtils.random(0.0f, 60.0f);
             float y = MathUtils.random(0.0f, 30.0f);
@@ -78,10 +74,11 @@ public class RenderSystem extends EntitySystem {
 
     /**
      * Screen resize
-     * @param width Screen width
+     *
+     * @param width  Screen width
      * @param height Screen height
      */
-    public void resize(int width, int height){
+    public void resize(int width, int height) {
         camera.setToOrtho(false, 30, 30);
         gui.resize(width, height);
     }
@@ -146,7 +143,7 @@ public class RenderSystem extends EntitySystem {
         spriteBatch.end();
 
         gui.render(deltaTime);
-        for(RenderInterface renderInterface : renderInterfaces){
+        for (RenderInterface renderInterface : renderInterfaces) {
             renderInterface.render(camera, spriteBatch, PIXEL_PER_METER);
         }
 
@@ -172,6 +169,7 @@ public class RenderSystem extends EntitySystem {
     private static float drawPointY;
     private static float drawPointSize;
 
+    @SuppressWarnings("unused")
     public static void drawPoint(float x, float y, float size) {
         drawPointActive = true;
         drawPointX = x;

@@ -7,7 +7,10 @@ import se.slingshot.components.GoalAreaComponent;
 import se.slingshot.components.ObjectiveComponent;
 
 /**
- * Created by emanu on 2015-12-22.
+ * Handles win condition
+ *
+ * @author emanu
+ * @since 2015-12
  */
 public class WinConditionSystem extends EntitySystem {
     // ECS
@@ -45,8 +48,6 @@ public class WinConditionSystem extends EntitySystem {
                 }
                 if(gotAllObjectives){
                     System.out.println("Win!");
-                }else{
-                    System.out.println("missing objectives");
                 }
             }
         }
