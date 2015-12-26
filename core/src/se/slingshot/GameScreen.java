@@ -41,6 +41,8 @@ public class GameScreen implements Screen {
         engine.addSystem(gravitySystem);
         MovementSystem movementSystem = new MovementSystem();
         engine.addSystem(movementSystem);
+        ObjectiveSystem objectiveSystem = new ObjectiveSystem();
+        engine.addSystem(objectiveSystem);
         OrbitSystem orbitSystem = new OrbitSystem();
         engine.addSystem(orbitSystem);
         TrajectorySystem trajectorySystem = new TrajectorySystem();
@@ -73,6 +75,7 @@ public class GameScreen implements Screen {
         player.add(playerControllableComponent);
         player.add(new NoGravityComponent());
         player.add(new CollisionComponent(player));
+        player.add(new KillableComponent());
         player.add(new TrajectoryComponent(10));
         engine.addEntity(player);
 
@@ -91,6 +94,7 @@ public class GameScreen implements Screen {
                 400, 2.2f
         ));
         sun.add(new GravityComponent());
+        sun.add(new CollisionComponent(sun));
         engine.addEntity(sun);
 
         // Debug planets
@@ -107,6 +111,7 @@ public class GameScreen implements Screen {
                 200, 1.8f
         ));
         planet.add(new GravityComponent());
+        planet.add(new CollisionComponent(planet));
         planet.add(new OrbitComponent(sunPossition,10,45,20));
         engine.addEntity(planet);
 
@@ -124,17 +129,41 @@ public class GameScreen implements Screen {
                 150, 1.2f
         ));
         planet2.add(new GravityComponent());
+        planet2.add(new CollisionComponent(planet2));
         engine.addEntity(planet2);
+
+        //Debug objective
+        Entity objective = new Entity();
+        Texture[] objectiveTextures = new Texture[]{
+                new Texture("win_full.png")
+        };
+        objective.add(new RenderComponent(objectiveTextures, false, 1.0f));
+        objective.add(new BodyComponent(
+                new Vector2(30f,15f),
+                new Vector2(),
+                new Vector2(),
+                1f, 1f,
+                150, 0.5f
+        ));
+        objective.add(new ObjectiveComponent(
+                playerPosition
+        ));
+        engine.addEntity(objective);
 
         //Debug goal area
         Entity goalArea = new Entity();
         Texture[] goalAreaTextures = new Texture[]{
                 new Texture("win_dotted.png")
         };
-        goalArea.add(new RenderComponent(planet2Textures, false, 1.0f));
-        goalArea.add(new GoalAreaComponent(
+        goalArea.add(new RenderComponent(goalAreaTextures, false, 1.0f));
+        goalArea.add(new BodyComponent(
                 new Vector2(40f,20f),
-                5f,
+                new Vector2(),
+                new Vector2(),
+                5f, 5f,
+                0, 2.5f
+        ));
+        goalArea.add(new GoalAreaComponent(
                 playerPosition
         ));
         engine.addEntity(goalArea);

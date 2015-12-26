@@ -6,6 +6,7 @@ import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
 import se.slingshot.components.BodyComponent;
 import se.slingshot.components.CollisionComponent;
+import se.slingshot.components.KillableComponent;
 import se.slingshot.components.RenderComponent;
 
 /**
@@ -16,9 +17,7 @@ import se.slingshot.components.RenderComponent;
  */
 public class DeathSystem extends EntitySystem {
     // ECS
-    private ImmutableArray<Entity> entities;
-    private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
-    private ComponentMapper<CollisionComponent> collisionMapper = ComponentMapper.getFor(CollisionComponent.class);
+    private ComponentMapper<KillableComponent> killableMapper = ComponentMapper.getFor(KillableComponent.class);
     private ComponentMapper<RenderComponent> renderMapper = ComponentMapper.getFor(RenderComponent.class);
 
     // Death
@@ -34,7 +33,6 @@ public class DeathSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(RenderComponent.class, BodyComponent.class).get());
 
         /** Receive collisions */
         eventBus.subscribe(this);
@@ -51,7 +49,9 @@ public class DeathSystem extends EntitySystem {
     @Handler
     public void handle(CollisionComponent collision){
         Entity entity = collision.entity;
-        RenderComponent render = renderMapper.get(entity);
-        render.visible = false;
+        if(killableMapper.get(entity) != null){
+            RenderComponent render = renderMapper.get(entity);
+            render.visible = false;
+        }
     }
 }

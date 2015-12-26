@@ -50,24 +50,24 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
     @Override
     public void update(float deltaTime) {
         for (int i = 0; i < collisionEntities.size(); i++) {
-            Entity collisionEntity = collisionEntities.get(i);
-            BodyComponent cBody = bodyMapper.get(collisionEntity);
-            CollisionComponent cCollision = collisionMapper.get(collisionEntity);
+            Entity collisionEntity1 = collisionEntities.get(i);
+            BodyComponent body1 = bodyMapper.get(collisionEntity1);
+            CollisionComponent collision1 = collisionMapper.get(collisionEntity1);
 
-            for (int j = 0; j < bodyEntities.size(); j++) {
-                Entity bodyEntity = bodyEntities.get(j);
-                if(collisionEntity == bodyEntity)
-                    continue;
-                BodyComponent bBody = bodyMapper.get(bodyEntity);
+            for (int j = i+1; j < collisionEntities.size(); j++) {
+                Entity collisionEntity2 = collisionEntities.get(j);
+                BodyComponent body2 = bodyMapper.get(collisionEntity2);
+                CollisionComponent collision2 = collisionMapper.get(collisionEntity2);
 
                 // Logic
-                Vector2 b1 = new Vector2(bBody.position);
-                Vector2 b2 = new Vector2(cBody.position);
+                Vector2 b1 = new Vector2(body1.position);
+                Vector2 b2 = new Vector2(body2.position);
                 float distance = b1.dst(b2);
-                float radiusDistance = cBody.radius + bBody.radius;
+                float radiusDistance = body1.radius + body2.radius;
                 if(distance < radiusDistance) {
                     /** Tell all interested systems that the collision occurred */
-                    eventBus.post(cCollision).now();
+                    eventBus.post(collision1).now();
+                    eventBus.post(collision2).now();
                 }
             }
         }
