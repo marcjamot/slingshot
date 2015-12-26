@@ -20,8 +20,7 @@ import se.slingshot.interfaces.RenderInterface;
  */
 public class CollisionSystem extends EntitySystem implements RenderInterface {
     // ECS
-    private ImmutableArray<Entity> collisionEntities;
-    private ImmutableArray<Entity> bodyEntities;
+    private ImmutableArray<Entity> entities;
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
     private ComponentMapper<CollisionComponent> collisionMapper = ComponentMapper.getFor(CollisionComponent.class);
 
@@ -42,26 +41,23 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
 
     @Override
     public void addedToEngine(Engine engine) {
-        collisionEntities = engine.getEntitiesFor(Family.all(BodyComponent.class, CollisionComponent.class).get());
-        bodyEntities = engine.getEntitiesFor(Family.all(BodyComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(BodyComponent.class, CollisionComponent.class).get());
     }
 
     @Override
     public void update(float deltaTime) {
-        for (int i = 0; i < collisionEntities.size(); i++) {
-            Entity collisionEntity1 = collisionEntities.get(i);
-            BodyComponent body1 = bodyMapper.get(collisionEntity1);
-            CollisionComponent collision1 = collisionMapper.get(collisionEntity1);
+        for (int i = 0; i < entities.size(); i++) {
+            Entity entity1 = entities.get(i);
+            BodyComponent body1 = bodyMapper.get(entity1);
+            CollisionComponent collision1 = collisionMapper.get(entity1);
 
-            for (int j = i+1; j < collisionEntities.size(); j++) {
-                Entity collisionEntity2 = collisionEntities.get(j);
-                BodyComponent body2 = bodyMapper.get(collisionEntity2);
-                CollisionComponent collision2 = collisionMapper.get(collisionEntity2);
+            for (int j = i+1; j < entities.size(); j++) {
+                Entity entity2 = entities.get(j);
+                BodyComponent body2 = bodyMapper.get(entity2);
+                CollisionComponent collision2 = collisionMapper.get(entity2);
 
                 // Logic
-                Vector2 b1 = new Vector2(body1.position);
-                Vector2 b2 = new Vector2(body2.position);
-                float distance = b1.dst(b2);
+                float distance = body1.position.dst(body2.position);
                 float radiusDistance = body1.radius + body2.radius;
                 if(distance < radiusDistance) {
                     /** Tell all interested systems that the collision occurred */
@@ -75,8 +71,8 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
     @Override
     public void render(Camera camera, SpriteBatch spriteBatch, float pixelPerMeter) {
         if (debug) {
-            for (int i = 0; i < bodyEntities.size(); i++) {
-                Entity entity = bodyEntities.get(i);
+            for (int i = 0; i < entities.size(); i++) {
+                Entity entity = entities.get(i);
                 BodyComponent body = bodyMapper.get(entity);
 
                 ShapeRenderer shapeRenderer = new ShapeRenderer();

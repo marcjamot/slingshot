@@ -19,6 +19,7 @@
       "direction_speed": 180.0
     },
     "gravity": false,
+    "killable": true,
     "render": {
       "images": [
         "spaceship_fire.png",
@@ -97,6 +98,7 @@
       "weight": 150.0,
       "radius": 1.2
     },
+    "collision": true,
     "gravity": true,
     "render": {
       "images": [
