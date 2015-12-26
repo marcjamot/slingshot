@@ -85,6 +85,7 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
                 shapeRenderer.setColor(Color.BLUE);
                 shapeRenderer.circle(body.position.x * pixelPerMeter, body.position.y * pixelPerMeter, body.radius * pixelPerMeter);
                 shapeRenderer.end();
+                shapeRenderer.dispose();
             }
         }
     }

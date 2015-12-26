@@ -155,6 +155,7 @@ public class RenderSystem extends EntitySystem {
             shapeRenderer.setColor(Color.BLUE);
             shapeRenderer.circle(drawPointX * PIXEL_PER_METER, drawPointY * PIXEL_PER_METER, drawPointSize);
             shapeRenderer.end();
+            shapeRenderer.dispose();
         }
     }
 

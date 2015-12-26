@@ -90,6 +90,7 @@ public class TrajectorySystem extends EntitySystem implements RenderInterface {
                 shapeRenderer.setColor(Color.WHITE);
                 shapeRenderer.circle(position.x * pixelPerMeter, position.y * pixelPerMeter, (0.11f - 0.01f * j) * pixelPerMeter);
                 shapeRenderer.end();
+                shapeRenderer.dispose();
             }
 
 
