@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import se.slingshot.components.ControllableComponent;
+import se.slingshot.components.RenderComponent;
 import se.slingshot.interfaces.FuelInterface;
 
 /**
@@ -18,6 +19,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
     // ECS
     private ImmutableArray<Entity> entities;
     private ComponentMapper<ControllableComponent> controlableMapper = ComponentMapper.getFor(ControllableComponent.class);
+    private ComponentMapper<RenderComponent> renderMapper = ComponentMapper.getFor(RenderComponent.class);
 
     // Control
     private boolean forwardThrust = false;
@@ -27,7 +29,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
 
     @Override
     public void addedToEngine(Engine engine) {
-        entities = engine.getEntitiesFor(Family.all(ControllableComponent.class).get());
+        entities = engine.getEntitiesFor(Family.all(ControllableComponent.class, RenderComponent.class).get());
         Gdx.input.setInputProcessor(this);
     }
 
@@ -36,6 +38,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             ControllableComponent control = controlableMapper.get(entity);
+            RenderComponent render = renderMapper.get(entity);
 
             fuel = control.fuel;
             // If we have no fuel, we can't move the ship
@@ -62,10 +65,13 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
 
             // Add thruster active time for fuel consumption
             if (forwardThrust) {
+                render.changeActiveAnimation("moving");
                 control.fuel -= deltaTime * 0.1f;
                 if (control.fuel < 0) {
                     control.fuel = 0;
                 }
+            } else {
+                render.changeActiveAnimation("still");
             }
         }
     }

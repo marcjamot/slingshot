@@ -116,7 +116,7 @@ public class RenderSystem extends EntitySystem {
             if (render.animationDeltaTime > render.timePerAnimation) {
                 render.animationDeltaTime -= render.timePerAnimation;
                 render.animationIndex += 1;
-                if (render.animationIndex >= render.textures.length) {
+                if (render.animationIndex >= render.activeAnimation.textures.length) {
                     if (render.repeatAnimation) {
                         render.animationIndex = 0;
                     } else {
@@ -131,7 +131,7 @@ public class RenderSystem extends EntitySystem {
             float rotation = body.direction.angle() - 90;
 
             spriteBatch.draw(
-                    render.textures[render.animationIndex],
+                    render.activeAnimation.textures[render.animationIndex],
                     body.position.x * PIXEL_PER_METER - halfWidth * PIXEL_PER_METER,
                     body.position.y * PIXEL_PER_METER - halfHeight * PIXEL_PER_METER,
                     halfWidth * PIXEL_PER_METER,

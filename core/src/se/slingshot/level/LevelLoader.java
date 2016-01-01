@@ -10,8 +10,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.owlike.genson.GenericType;
 import com.owlike.genson.Genson;
 import se.slingshot.components.*;
+import se.slingshot.implementations.Animation;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,15 +111,20 @@ public class LevelLoader {
                 );
             case "render":
                 Map<String, Object> render = (Map<String, Object>) value;
-                List<String> images = (List<String>) render.get("images");
-                Texture[] textures = new Texture[images.size()];
-                for (int i = 0; i < textures.length; i++) {
-                    textures[i] = new Texture(images.get(i));
-                }
+                Map<String, List<String>> animationData = (Map<String, List<String>>) render.get("animations");
+                List<Animation> animations = new ArrayList<>();
+                animationData.forEach((animationName, animationImages) -> {
+                    Texture[] textures = new Texture[animationImages.size()];
+                    for (int i = 0; i < animationImages.size(); i++) {
+                        String animationImage = animationImages.get(i);
+                        textures[i] = new Texture(animationImage);
+                    }
+                    animations.add(new Animation(animationName, textures));
+                });
                 return new RenderComponent(
-                        textures,
                         (boolean) render.get("repeat_animation"),
-                        (float) (double) render.get("animation_speed")
+                        (float) (double) render.get("animation_speed"),
+                        animations.toArray(new Animation[animations.size()])
                 );
             case "trajectory":
                 return new TrajectoryComponent(

@@ -21,10 +21,15 @@
     "gravity": false,
     "killable": true,
     "render": {
-      "images": [
-        "spaceship_fire.png",
-        "spaceship_fire_2.png"
-      ],
+      "animations": {
+        "still": [
+          "spaceship.png"
+        ],
+        "moving": [
+          "spaceship_fire.png",
+          "spaceship_fire_2.png"
+        ]
+      },
       "repeat_animation": true,
       "animation_speed": 0.5
     },
@@ -47,15 +52,17 @@
     "collision": true,
     "gravity": true,
     "render": {
-      "images": [
-        "sun.png"
-      ],
+      "animations": {
+        "images": [
+          "sun.png"
+        ]
+      },
       "repeat_animation": false,
       "animation_speed": 1.0
     }
   },
   {
-	"id": "earth",
+    "id": "earth",
     "body": {
       "start_x": 0.0,
       "start_y": 0.0,
@@ -77,15 +84,17 @@
       "speed": 20.0
     },
     "render": {
-      "images": [
-        "earth.png"
-      ],
+      "animations": {
+        "images": [
+          "earth.png"
+        ]
+      },
       "repeat_animation": false,
       "animation_speed": 1.0
     }
   },
   {
-	"id": "planetTwo",
+    "id": "planetTwo",
     "body": {
       "start_x": 40.0,
       "start_y": 20.0,
@@ -101,16 +110,18 @@
     "collision": true,
     "gravity": true,
     "render": {
-      "images": [
-        "earth.png"
-      ],
+      "animations": {
+        "images": [
+          "earth.png"
+        ]
+      },
       "repeat_animation": false,
       "animation_speed": 1.0
     }
   },
   {
-	"id": "goal area",
-	"body": {
+    "id": "goal area",
+    "body": {
       "start_x": 40.0,
       "start_y": 20.0,
       "direction_x": 0.0,
@@ -121,22 +132,23 @@
       "width": 5.0,
       "weight": 0.0,
       "radius": 2.5
-		
-	},
+    },
     "goal_area": {
       "id": "player"
     },
     "render": {
-      "images": [
-        "win_dotted.png"
-      ],
+      "animations": {
+        "images": [
+          "win_dotted.png"
+        ]
+      },
       "repeat_animation": false,
       "animation_speed": 1.0
     }
   },
   {
-	"id": "objective",
-	"body": {
+    "id": "objective",
+    "body": {
       "start_x": 30.0,
       "start_y": 15.0,
       "direction_x": 0.0,
@@ -147,15 +159,16 @@
       "width": 1.0,
       "weight": 0.0,
       "radius": 0.5
-		
-	},
+    },
     "objective": {
       "id": "player"
     },
     "render": {
-      "images": [
-        "win_full.png"
-      ],
+      "animations": {
+        "images": [
+          "win_full.png"
+        ]
+      },
       "repeat_animation": false,
       "animation_speed": 1.0
     }

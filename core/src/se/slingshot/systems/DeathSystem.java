@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
 import se.slingshot.components.*;
+import se.slingshot.implementations.Animation;
 
 /**
  * Handles entities that dies
@@ -83,8 +84,11 @@ public class DeathSystem extends EntitySystem {
                     new Texture("explosion_7.png"),
                     new Texture("explosion_8.png")
             };
+            Animation[] animations = new Animation[]{
+                    new Animation("explode", textures)
+            };
             float timePerAnimation = 0.3f;
-            explosion.add(new RenderComponent(textures, false, timePerAnimation));
+            explosion.add(new RenderComponent(false, timePerAnimation, animations));
             explosion.add(new LifetimeComponent(timePerAnimation * textures.length));
             engine.addEntity(explosion);
 
