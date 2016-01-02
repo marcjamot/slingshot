@@ -6,14 +6,26 @@ import se.slingshot.interfaces.ScreenInterface;
 import se.slingshot.menu.ChooseLevelScreen;
 
 public class SlingshotGame extends Game implements ScreenInterface {
+    private String loadedLevel;
+
     @Override
     public void create() {
-        Screen mainScreen = new ChooseLevelScreen(this);
-        setScreen(mainScreen);
+        menu();
     }
 
     @Override
-    public void change(Screen screen) {
-        setScreen(screen);
+    public void startLevel(String name) {
+        loadedLevel = name;
+        setScreen(new GameScreen(this, name));
+    }
+
+    @Override
+    public void reloadLevel() {
+        setScreen(new GameScreen(this, loadedLevel));
+    }
+
+    @Override
+    public void menu() {
+        setScreen(new ChooseLevelScreen(this));
     }
 }

@@ -96,7 +96,7 @@ public class ChooseLevelScreen implements Screen, InputProcessor {
 
         // Level 1
         if(0.1f < x && x < 0.28f && 0.58f < y && y < 0.74f){
-            screenHandler.change(new GameScreen("level_1.json"));
+            screenHandler.startLevel("level_1.json");
         }
         System.out.println("x["+x+"] y["+y+"]");
         return false;

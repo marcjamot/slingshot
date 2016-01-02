@@ -3,8 +3,11 @@ package se.slingshot.systems;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
 import se.slingshot.components.BodyComponent;
 import se.slingshot.components.ControllableComponent;
+import se.slingshot.implementations.GameOver;
 
 /**
  * Handles movement of entities
@@ -19,6 +22,13 @@ public class MovementSystem extends EntitySystem {
     private ComponentMapper<ControllableComponent> controlableMapper = ComponentMapper.getFor(ControllableComponent.class);
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
+    // Movement
+    public boolean gameOver;
+
+    public MovementSystem(MBassador<GameOver> eventBus) {
+        eventBus.subscribe(this);
+    }
+
     @Override
     public void addedToEngine(Engine engine) {
         controlEntities = engine.getEntitiesFor(Family.all(ControllableComponent.class, BodyComponent.class).get());
@@ -27,6 +37,9 @@ public class MovementSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
+        if(gameOver){
+            return;
+        }
 
         //Applying Controls
         for (int i = 0; i < controlEntities.size(); i++) {
@@ -50,4 +63,9 @@ public class MovementSystem extends EntitySystem {
         }
     }
 
+    @Handler
+    @SuppressWarnings("unused")
+    public void handle(GameOver collision) {
+        gameOver = true;
+    }
 }

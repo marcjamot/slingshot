@@ -1,7 +1,5 @@
 package se.slingshot.interfaces;
 
-import com.badlogic.gdx.Screen;
-
 /**
  * Interface for changing screen
  *
@@ -9,5 +7,7 @@ import com.badlogic.gdx.Screen;
  * @since 2016-01
  */
 public interface ScreenInterface {
-    public void change(Screen screen);
+    void startLevel(String name);
+    void reloadLevel();
+    void menu();
 }

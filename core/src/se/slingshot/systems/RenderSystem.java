@@ -3,17 +3,17 @@ package se.slingshot.systems;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
 import se.slingshot.components.BodyComponent;
 import se.slingshot.components.RenderComponent;
 import se.slingshot.gui.Gui;
+import se.slingshot.implementations.GameOver;
 import se.slingshot.interfaces.FuelInterface;
 import se.slingshot.interfaces.RenderInterface;
 
@@ -43,11 +43,12 @@ public class RenderSystem extends EntitySystem {
 
     private final Gui gui = new Gui();
     private final FuelInterface fuel;
-    private final RenderInterface[] renderInterfaces;
+    private final List<RenderInterface> renderInterfaces;
 
-    public RenderSystem(RenderInterface[] renderInterfaces, FuelInterface fuel) {
+    public RenderSystem(List<RenderInterface> renderInterfaces, FuelInterface fuel, MBassador<GameOver> eventBus) {
         this.renderInterfaces = renderInterfaces;
         this.fuel = fuel;
+        eventBus.subscribe(this);
     }
 
     @Override
@@ -167,6 +168,23 @@ public class RenderSystem extends EntitySystem {
     public void removedFromEngine(Engine engine) {
         gui.dispose();
         spriteBatch.dispose();
+    }
+
+    @Handler
+    @SuppressWarnings("unused")
+    public void handle(GameOver collision) {
+        Texture texture = null;
+        if(collision == GameOver.Win) {
+            texture = new Texture("win.png");
+        } else if(collision == GameOver.Lose){
+            texture = new Texture("lose.png");
+        }
+        final Texture finalTexture = texture;
+        renderInterfaces.add((c, sB, pPM) -> {
+            sB.begin();
+            sB.draw(finalTexture, 3 * pPM, 3 * pPM, 40 * pPM, 20 * pPM);
+            sB.end();
+        });
     }
 
     private static boolean drawPointActive;

@@ -5,9 +5,13 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
 import se.slingshot.components.ControllableComponent;
 import se.slingshot.components.RenderComponent;
+import se.slingshot.implementations.GameOver;
 import se.slingshot.interfaces.FuelInterface;
+import se.slingshot.interfaces.ScreenInterface;
 
 /**
  * System for user control input
@@ -22,10 +26,17 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
     private ComponentMapper<RenderComponent> renderMapper = ComponentMapper.getFor(RenderComponent.class);
 
     // Control
+    private final ScreenInterface screenHandler;
     private boolean forwardThrust = false;
     private boolean leftThrust = false;
     private boolean rightThrust = false;
     private float fuel;
+    private boolean gameOver;
+
+    public ControlSystem(ScreenInterface screenHandler, MBassador<GameOver> eventBus) {
+        this.screenHandler = screenHandler;
+        eventBus.subscribe(this);
+    }
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -42,7 +53,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
 
             fuel = control.fuel;
             // If we have no fuel, we can't move the ship
-            if (control.fuel == 0) {
+            if (control.fuel == 0 || gameOver) {
                 render.changeActiveAnimation("still");
                 control.directionThrust = 0;
                 control.forwardThrust = 0;
@@ -79,16 +90,27 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case Input.Keys.W:
-                forwardThrust = true;
-                break;
-            case Input.Keys.A:
-                leftThrust = true;
-                break;
-            case Input.Keys.D:
-                rightThrust = true;
-                break;
+        if(gameOver){
+            switch (keycode){
+                case Input.Keys.ENTER:
+                    screenHandler.reloadLevel();
+                    break;
+                case Input.Keys.ESCAPE:
+                    screenHandler.menu();
+                    break;
+            }
+        } else {
+            switch (keycode) {
+                case Input.Keys.W:
+                    forwardThrust = true;
+                    break;
+                case Input.Keys.A:
+                    leftThrust = true;
+                    break;
+                case Input.Keys.D:
+                    rightThrust = true;
+                    break;
+            }
         }
         return true;
     }
@@ -142,5 +164,11 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
     @Override
     public float get() {
         return fuel;
+    }
+
+    @Handler
+    @SuppressWarnings("unused")
+    public void handle(GameOver collision) {
+        gameOver = true;
     }
 }

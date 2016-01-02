@@ -1,14 +1,18 @@
 package se.slingshot;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import net.engio.mbassy.bus.MBassador;
 import se.slingshot.components.CollisionComponent;
+import se.slingshot.implementations.GameOver;
 import se.slingshot.interfaces.RenderInterface;
+import se.slingshot.interfaces.ScreenInterface;
 import se.slingshot.level.LevelLoader;
 import se.slingshot.systems.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Screen when a level is loaded and in game
@@ -20,31 +24,33 @@ public class GameScreen implements Screen {
     private Engine engine;
     private RenderSystem renderSystem;
 
+    private final ScreenInterface screenHandler;
     private final String levelName;
 
-    public GameScreen(String levelName) {
+    public GameScreen(ScreenInterface screenHandler, String levelName) {
+        this.screenHandler = screenHandler;
         this.levelName = levelName;
     }
 
     @Override
     public void show() {
         engine = new PooledEngine();
-        MBassador<CollisionComponent> eventBus = new MBassador<>();
+        MBassador<CollisionComponent> collisionBus = new MBassador<>();
+        MBassador<GameOver> gameOverBus = new MBassador<>();
 
-        CollisionSystem collisionSystem = new CollisionSystem(eventBus, false);
-        ControlSystem controlSystem = new ControlSystem();
-        DeathSystem deathSystem = new DeathSystem(eventBus);
+        CollisionSystem collisionSystem = new CollisionSystem(collisionBus, false);
+        ControlSystem controlSystem = new ControlSystem(screenHandler, gameOverBus);
+        DeathSystem deathSystem = new DeathSystem(collisionBus, gameOverBus);
         GravitySystem gravitySystem = new GravitySystem();
-        MovementSystem movementSystem = new MovementSystem();
+        MovementSystem movementSystem = new MovementSystem(gameOverBus);
         ObjectiveSystem objectiveSystem = new ObjectiveSystem();
         OrbitSystem orbitSystem = new OrbitSystem();
         TrajectorySystem trajectorySystem = new TrajectorySystem();
-        RenderInterface[] renderInterfaces = new RenderInterface[]{
-                collisionSystem,
-                trajectorySystem
-        };
-        renderSystem = new RenderSystem(renderInterfaces, controlSystem);
-        WinConditionSystem winConditionSystem = new WinConditionSystem();
+        List<RenderInterface> renderInterfaces = new ArrayList<>();
+        renderInterfaces.add(collisionSystem);
+        renderInterfaces.add(trajectorySystem);
+        renderSystem = new RenderSystem(renderInterfaces, controlSystem, gameOverBus);
+        WinConditionSystem winConditionSystem = new WinConditionSystem(gameOverBus);
 
         // Add the systems in the order they should execute
         engine.addSystem(controlSystem);

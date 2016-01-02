@@ -8,6 +8,7 @@ import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
 import se.slingshot.components.*;
 import se.slingshot.implementations.Animation;
+import se.slingshot.implementations.GameOver;
 
 /**
  * Handles entities that dies
@@ -25,22 +26,21 @@ public class DeathSystem extends EntitySystem {
     private ComponentMapper<RenderComponent> renderMapper = ComponentMapper.getFor(RenderComponent.class);
 
     // Death
-    /** EventBus is used to pass messages between systems conveniently */
-    private final MBassador<CollisionComponent> eventBus;
+    private final MBassador<GameOver> eventBus;
 
     /**
      * @param eventBus EventBus is used to pass messages between systems conveniently
      */
-    public DeathSystem(MBassador<CollisionComponent> eventBus) {
-        this.eventBus = eventBus;
+    public DeathSystem(MBassador<CollisionComponent> eventBus, MBassador<GameOver> gameOverBus) {
+        /** EventBus is used to pass messages between systems conveniently */
+        eventBus.subscribe(this);
+        this.eventBus = gameOverBus;
     }
 
     @Override
     public void addedToEngine(Engine engine) {
         this.engine = engine;
         entities = engine.getEntitiesFor(Family.all(LifetimeComponent.class).get());
-        /** Receive collisions */
-        eventBus.subscribe(this);
     }
 
     @Override
@@ -94,6 +94,8 @@ public class DeathSystem extends EntitySystem {
 
             // Remove entity
             engine.removeEntity(entity);
+
+            eventBus.post(GameOver.Lose).now();
         }
     }
 }
