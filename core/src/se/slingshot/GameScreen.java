@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
         engine = new PooledEngine();
         MBassador<CollisionComponent> eventBus = new MBassador<>();
 
-        CollisionSystem collisionSystem = new CollisionSystem(eventBus, true);
+        CollisionSystem collisionSystem = new CollisionSystem(eventBus, false);
         ControlSystem controlSystem = new ControlSystem();
         DeathSystem deathSystem = new DeathSystem(eventBus);
         GravitySystem gravitySystem = new GravitySystem();

@@ -43,6 +43,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
             fuel = control.fuel;
             // If we have no fuel, we can't move the ship
             if (control.fuel == 0) {
+                render.changeActiveAnimation("still");
                 control.directionThrust = 0;
                 control.forwardThrust = 0;
                 continue;

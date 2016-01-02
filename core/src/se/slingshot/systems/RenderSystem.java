@@ -130,15 +130,19 @@ public class RenderSystem extends EntitySystem {
             float halfHeight = body.height * 0.5f;
             float rotation = body.direction.angle() - 90;
 
+            Texture texture = render.activeAnimation.textures[render.animationIndex];
+            float textureWidth = texture.getWidth();
+            float textureHeight = texture.getHeight();
+
             spriteBatch.draw(
-                    render.activeAnimation.textures[render.animationIndex],
+                    texture,
                     body.position.x * PIXEL_PER_METER - halfWidth * PIXEL_PER_METER,
                     body.position.y * PIXEL_PER_METER - halfHeight * PIXEL_PER_METER,
                     halfWidth * PIXEL_PER_METER,
                     halfHeight * PIXEL_PER_METER,
                     body.width * PIXEL_PER_METER,
                     body.height * PIXEL_PER_METER,
-                    1, 1, rotation, 0, 0, (int) PIXEL_PER_METER, (int) PIXEL_PER_METER, false, false);
+                    1, 1, rotation, 0, 0, (int) textureWidth, (int) textureHeight, false, false);
         }
         spriteBatch.end();
 

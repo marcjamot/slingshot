@@ -23,11 +23,10 @@
     "render": {
       "animations": {
         "still": [
-          "spaceship.png"
+          "Flea.png"
         ],
         "moving": [
-          "spaceship_fire.png",
-          "spaceship_fire_2.png"
+          "Flea thrust.png"
         ]
       },
       "repeat_animation": true,
@@ -44,17 +43,17 @@
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 5.0,
-      "width": 5.0,
+      "height": 8.0,
+      "width": 8.0,
       "weight": 400.0,
-      "radius": 2.2
+      "radius": 3.0
     },
     "collision": true,
     "gravity": true,
     "render": {
       "animations": {
         "images": [
-          "sun.png"
+          "Sun.png"
         ]
       },
       "repeat_animation": false,
@@ -86,7 +85,7 @@
     "render": {
       "animations": {
         "images": [
-          "earth.png"
+          "Exoplanet2.png"
         ]
       },
       "repeat_animation": false,
@@ -112,7 +111,7 @@
     "render": {
       "animations": {
         "images": [
-          "earth.png"
+          "Ice Giant.png"
         ]
       },
       "repeat_animation": false,
