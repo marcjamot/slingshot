@@ -31,9 +31,9 @@ public class ChooseLevelScreen implements Screen, InputProcessor {
     public void show() {
         Gdx.input.setInputProcessor(this);
 
-        camera = new OrthographicCamera(1, 1);
+        camera = new OrthographicCamera(2.55f, 3.3f);
         batch = new SpriteBatch();
-        background = new Texture("menu.png");
+        background = new Texture("chooselevel.jpg");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ChooseLevelScreen implements Screen, InputProcessor {
         camera.update();
         batch.setTransformMatrix(camera.combined);
         batch.begin();
-        batch.draw(background, 0, 0, 256, 256);
+        batch.draw(background, 0, 0);
         batch.end();
     }
 
@@ -76,8 +76,7 @@ public class ChooseLevelScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        screenHandler.change(new GameScreen());
-        return true;
+        return false;
     }
 
     @Override
@@ -92,6 +91,14 @@ public class ChooseLevelScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        float x = (float)screenX / Gdx.graphics.getWidth();
+        float y = (float)screenY / Gdx.graphics.getHeight();
+
+        // Level 1
+        if(0.1f < x && x < 0.28f && 0.58f < y && y < 0.74f){
+            screenHandler.change(new GameScreen());
+        }
+        System.out.println("x["+x+"] y["+y+"]");
         return false;
     }
 

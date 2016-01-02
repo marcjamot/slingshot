@@ -8,7 +8,7 @@ import se.slingshot.menu.ChooseLevelScreen;
 public class SlingshotGame extends Game implements ScreenInterface {
     @Override
     public void create() {
-        Screen mainScreen = new GameScreen();
+        Screen mainScreen = new ChooseLevelScreen(this);
         setScreen(mainScreen);
     }
 
