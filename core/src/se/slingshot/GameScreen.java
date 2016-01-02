@@ -20,6 +20,12 @@ public class GameScreen implements Screen {
     private Engine engine;
     private RenderSystem renderSystem;
 
+    private final String levelName;
+
+    public GameScreen(String levelName) {
+        this.levelName = levelName;
+    }
+
     @Override
     public void show() {
         engine = new PooledEngine();
@@ -52,7 +58,7 @@ public class GameScreen implements Screen {
         engine.addSystem(trajectorySystem);
         engine.addSystem(renderSystem);
 
-        new LevelLoader().from(engine, "level_1.json");
+        new LevelLoader().from(engine, levelName);
     }
 
     @Override
