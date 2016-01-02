@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import se.slingshot.GameScreen;
 import se.slingshot.interfaces.ScreenInterface;
 
 /**
@@ -91,14 +90,14 @@ public class ChooseLevelScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float x = (float)screenX / Gdx.graphics.getWidth();
-        float y = (float)screenY / Gdx.graphics.getHeight();
+        float x = (float) screenX / Gdx.graphics.getWidth();
+        float y = (float) screenY / Gdx.graphics.getHeight();
 
         // Level 1
-        if(0.1f < x && x < 0.28f && 0.58f < y && y < 0.74f){
+        if (0.1f < x && x < 0.28f && 0.58f < y && y < 0.74f) {
             screenHandler.startLevel("level_1.json");
         }
-        System.out.println("x["+x+"] y["+y+"]");
+        System.out.println("x[" + x + "] y[" + y + "]");
         return false;
     }
 
