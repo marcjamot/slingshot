@@ -3,7 +3,10 @@ package se.slingshot.systems;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
@@ -33,8 +36,6 @@ public class RenderSystem extends EntitySystem {
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
 
     // Render
-    private final static float PIXEL_PER_METER = 256;
-
     private OrthographicCamera camera;
     private SpriteBatch spriteBatch;
 
@@ -55,19 +56,23 @@ public class RenderSystem extends EntitySystem {
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(RenderComponent.class, BodyComponent.class).get());
 
+        float screenWidth = 160.0f;
+        float screenHeight = 90.0f;
+        camera = new OrthographicCamera(screenWidth, screenHeight);
+        camera.position.set(screenWidth / 2.0f, screenHeight / 2.0f, 0.0f);
+        spriteBatch = new SpriteBatch();
+
         gui.create(fuel);
-        camera = new OrthographicCamera();
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
         resize(width, height);
-        spriteBatch = new SpriteBatch();
 
         starImage = new Texture("star.png");
         stars = new ArrayList<>(100);
         for (int i = 0; i < 100; i++) {
-            float x = MathUtils.random(0.0f, 60.0f);
-            float y = MathUtils.random(0.0f, 30.0f);
-            float size = MathUtils.random(0.0f, 0.1f);
+            float x = MathUtils.random(0.0f, screenWidth);
+            float y = MathUtils.random(0.0f, screenHeight);
+            float size = MathUtils.random(0.1f, 0.8f);
             Vector3 star = new Vector3(x, y, size);
             stars.add(i, star);
         }
@@ -80,7 +85,6 @@ public class RenderSystem extends EntitySystem {
      * @param height Screen height
      */
     public void resize(int width, int height) {
-        camera.setToOrtho(false, 30, 30);
         gui.resize(width, height);
     }
 
@@ -88,15 +92,13 @@ public class RenderSystem extends EntitySystem {
     public void update(float deltaTime) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
         camera.update();
-        spriteBatch.setTransformMatrix(camera.combined);
+        spriteBatch.setProjectionMatrix(camera.combined);
 
         // Background
         spriteBatch.begin();
-        for (int i = 0; i < 100; i++) {
-            Vector3 star = stars.get(i);
-            spriteBatch.draw(starImage, star.x * PIXEL_PER_METER, star.y * PIXEL_PER_METER, star.z * PIXEL_PER_METER, star.z * PIXEL_PER_METER);
+        for (Vector3 star : stars) {
+            spriteBatch.draw(starImage, star.x, star.y, star.z, star.z);
         }
         spriteBatch.end();
 
@@ -137,19 +139,19 @@ public class RenderSystem extends EntitySystem {
 
             spriteBatch.draw(
                     texture,
-                    body.position.x * PIXEL_PER_METER - halfWidth * PIXEL_PER_METER,
-                    body.position.y * PIXEL_PER_METER - halfHeight * PIXEL_PER_METER,
-                    halfWidth * PIXEL_PER_METER,
-                    halfHeight * PIXEL_PER_METER,
-                    body.width * PIXEL_PER_METER,
-                    body.height * PIXEL_PER_METER,
+                    body.position.x - halfWidth,
+                    body.position.y - halfHeight,
+                    halfWidth,
+                    halfHeight,
+                    body.width,
+                    body.height,
                     1, 1, rotation, 0, 0, (int) textureWidth, (int) textureHeight, false, false);
         }
         spriteBatch.end();
 
         gui.render(deltaTime);
         for (RenderInterface renderInterface : renderInterfaces) {
-            renderInterface.render(camera, spriteBatch, PIXEL_PER_METER);
+            renderInterface.render(camera, spriteBatch);
         }
 
         // Debug draw
@@ -158,7 +160,7 @@ public class RenderSystem extends EntitySystem {
             shapeRenderer.setTransformMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.BLUE);
-            shapeRenderer.circle(drawPointX * PIXEL_PER_METER, drawPointY * PIXEL_PER_METER, drawPointSize);
+            shapeRenderer.circle(drawPointX, drawPointY, drawPointSize);
             shapeRenderer.end();
             shapeRenderer.dispose();
         }
@@ -174,15 +176,15 @@ public class RenderSystem extends EntitySystem {
     @SuppressWarnings("unused")
     public void handle(GameOver collision) {
         Texture texture = null;
-        if(collision == GameOver.Win) {
+        if (collision == GameOver.Win) {
             texture = new Texture("win.png");
-        } else if(collision == GameOver.Lose){
+        } else if (collision == GameOver.Lose) {
             texture = new Texture("lose.png");
         }
         final Texture finalTexture = texture;
-        renderInterfaces.add((c, sB, pPM) -> {
+        renderInterfaces.add((c, sB) -> {
             sB.begin();
-            sB.draw(finalTexture, 3 * pPM, 3 * pPM, 40 * pPM, 20 * pPM);
+            sB.draw(finalTexture, 2, 2, 12, 5);
             sB.end();
         });
     }

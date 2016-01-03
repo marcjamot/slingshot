@@ -38,7 +38,7 @@ public class GameScreen implements Screen {
         MBassador<CollisionComponent> collisionBus = new MBassador<>();
         MBassador<GameOver> gameOverBus = new MBassador<>();
 
-        CollisionSystem collisionSystem = new CollisionSystem(collisionBus, false);
+        CollisionSystem collisionSystem = new CollisionSystem(collisionBus, true);
         ControlSystem controlSystem = new ControlSystem(screenHandler, gameOverBus);
         DeathSystem deathSystem = new DeathSystem(collisionBus, gameOverBus);
         GravitySystem gravitySystem = new GravitySystem();

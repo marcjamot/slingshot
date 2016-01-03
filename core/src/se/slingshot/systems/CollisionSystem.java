@@ -69,17 +69,17 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
     }
 
     @Override
-    public void render(Camera camera, SpriteBatch spriteBatch, float pixelPerMeter) {
+    public void render(Camera camera, SpriteBatch spriteBatch) {
         if (debug) {
             for (int i = 0; i < entities.size(); i++) {
                 Entity entity = entities.get(i);
                 BodyComponent body = bodyMapper.get(entity);
 
                 ShapeRenderer shapeRenderer = new ShapeRenderer();
-                shapeRenderer.setTransformMatrix(camera.combined);
+                shapeRenderer.setProjectionMatrix(camera.combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.setColor(Color.BLUE);
-                shapeRenderer.circle(body.position.x * pixelPerMeter, body.position.y * pixelPerMeter, body.radius * pixelPerMeter);
+                shapeRenderer.circle(body.position.x, body.position.y, body.radius);
                 shapeRenderer.end();
                 shapeRenderer.dispose();
             }

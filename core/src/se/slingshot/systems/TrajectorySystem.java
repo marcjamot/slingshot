@@ -74,7 +74,7 @@ public class TrajectorySystem extends EntitySystem implements RenderInterface {
     }
 
     @Override
-    public void render(Camera camera, SpriteBatch spriteBatch, float pixelPerMeter) {
+    public void render(Camera camera, SpriteBatch spriteBatch) {
         for (int i = 0; i < trajectoryEntities.size(); i++) {
             Entity entity = trajectoryEntities.get(i);
             TrajectoryComponent trajectoryComponent = trajectoryMapper.get(entity);
@@ -85,10 +85,10 @@ public class TrajectorySystem extends EntitySystem implements RenderInterface {
                 Vector2 position = trajectory.get(j);
 
                 ShapeRenderer shapeRenderer = new ShapeRenderer();
-                shapeRenderer.setTransformMatrix(camera.combined);
+                shapeRenderer.setProjectionMatrix(camera.combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(Color.WHITE);
-                shapeRenderer.circle(position.x * pixelPerMeter, position.y * pixelPerMeter, (0.11f - 0.01f * j) * pixelPerMeter);
+                shapeRenderer.circle(position.x, position.y, 0.11f - 0.01f * j);
                 shapeRenderer.end();
                 shapeRenderer.dispose();
             }

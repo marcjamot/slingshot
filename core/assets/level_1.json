@@ -2,16 +2,16 @@
   {
     "id": "player",
     "body": {
-      "start_x": 8.0,
-      "start_y": 8.0,
+      "start_x": 15.0,
+      "start_y": 15.0,
       "direction_x": 1.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 2.0,
-      "width": 2.0,
+      "height": 6.0,
+      "width": 6.0,
       "weight": 1.0,
-      "radius": 0.6
+      "radius": 1.6
     },
     "collision": true,
     "controllable": {
@@ -37,16 +37,16 @@
   {
     "id": "sun",
     "body": {
-      "start_x": 20.0,
-      "start_y": 12.0,
+      "start_x": 70.0,
+      "start_y": 40.0,
       "direction_x": 0.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 8.0,
-      "width": 8.0,
+      "height": 30.0,
+      "width": 30.0,
       "weight": 400.0,
-      "radius": 3.0
+      "radius": 11.0
     },
     "collision": true,
     "gravity": true,
@@ -69,16 +69,16 @@
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 4.0,
-      "width": 4.0,
+      "height": 10.0,
+      "width": 10.0,
       "weight": 200.0,
-      "radius": 1.8
+      "radius": 4.5
     },
     "collision": true,
     "gravity": true,
     "orbit": {
       "id": "sun",
-      "distance": 10.0,
+      "distance": 30.0,
       "angle": 45.0,
       "speed": 20.0
     },
@@ -95,16 +95,16 @@
   {
     "id": "planetTwo",
     "body": {
-      "start_x": 40.0,
-      "start_y": 20.0,
+      "start_x": 140.0,
+      "start_y": 75.0,
       "direction_x": 0.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 3.0,
-      "width": 3.0,
+      "height": 6.0,
+      "width": 6.0,
       "weight": 150.0,
-      "radius": 1.2
+      "radius": 2.5
     },
     "collision": true,
     "gravity": true,
@@ -121,16 +121,16 @@
   {
     "id": "goal area",
     "body": {
-      "start_x": 40.0,
-      "start_y": 20.0,
+      "start_x": 140.0,
+      "start_y": 75.0,
       "direction_x": 0.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 5.0,
-      "width": 5.0,
+      "height": 12.0,
+      "width": 12.0,
       "weight": 0.0,
-      "radius": 2.5
+      "radius": 6.0
     },
     "goal_area": {
       "id": "player"
@@ -148,16 +148,16 @@
   {
     "id": "objective",
     "body": {
-      "start_x": 30.0,
-      "start_y": 15.0,
+      "start_x": 120.0,
+      "start_y": 60.0,
       "direction_x": 0.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 1.0,
-      "width": 1.0,
+      "height": 3.0,
+      "width": 3.0,
       "weight": 0.0,
-      "radius": 0.5
+      "radius": 1.5
     },
     "objective": {
       "id": "player"
