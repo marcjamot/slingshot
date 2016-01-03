@@ -38,18 +38,16 @@ public class TrajectorySystem extends EntitySystem implements RenderInterface {
 
     @Override
     public void update(float deltaTime) {
-
         for (int i = 0; i < trajectoryEntities.size(); i++) {
-            Entity trajetoryEntety = trajectoryEntities.get(i);
-            BodyComponent trajectoryBody = bodyMapper.get(trajetoryEntety);
-            TrajectoryComponent trajectory = trajectoryMapper.get(trajetoryEntety);
+            Entity trajectoryEntity = trajectoryEntities.get(i);
+            BodyComponent trajectoryBody = bodyMapper.get(trajectoryEntity);
+            TrajectoryComponent trajectory = trajectoryMapper.get(trajectoryEntity);
 
 
             Vector2 position = new Vector2(trajectoryBody.position);
             Vector2 velocity = new Vector2(trajectoryBody.velocity);
 
             for (int j = 0; j < trajectory.trajectory.size(); j++) {
-
                 for (int k = 0; k < gravityEntities.size(); k++) {
                     Entity gravityEntity = gravityEntities.get(k);
                     BodyComponent gravityBody = bodyMapper.get(gravityEntity);
@@ -62,7 +60,6 @@ public class TrajectorySystem extends EntitySystem implements RenderInterface {
                     gravityDir.nor();
                     gravityDir.scl(acceleration * j * timestepTime);
                     velocity.add(gravityDir);
-
                 }
 
                 Vector2 tmp = new Vector2(velocity);
@@ -88,7 +85,7 @@ public class TrajectorySystem extends EntitySystem implements RenderInterface {
                 shapeRenderer.setProjectionMatrix(camera.combined);
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(Color.WHITE);
-                shapeRenderer.circle(position.x, position.y, 0.11f - 0.01f * j);
+                shapeRenderer.circle(position.x, position.y, 0.6f - 0.1f * j);
                 shapeRenderer.end();
                 shapeRenderer.dispose();
             }
