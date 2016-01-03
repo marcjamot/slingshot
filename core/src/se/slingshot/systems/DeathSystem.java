@@ -73,7 +73,7 @@ public class DeathSystem extends EntitySystem {
             // Add death explosion
             Entity explosion = new Entity();
             Vector2 position = new Vector2(body.position);
-            explosion.add(new BodyComponent(position, new Vector2(), new Vector2(), 1, 1, 0, 0));
+            explosion.add(new BodyComponent(position, new Vector2(), new Vector2(), 10, 10, 0, 0));
             Texture[] textures = new Texture[]{
                     new Texture("explosion_1.png"),
                     new Texture("explosion_2.png"),

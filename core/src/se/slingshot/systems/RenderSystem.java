@@ -184,7 +184,7 @@ public class RenderSystem extends EntitySystem {
         final Texture finalTexture = texture;
         renderInterfaces.add((c, sB) -> {
             sB.begin();
-            sB.draw(finalTexture, 2, 2, 12, 5);
+            sB.draw(finalTexture, 20, 20, 120, 50);
             sB.end();
         });
     }
