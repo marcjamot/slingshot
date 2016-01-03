@@ -29,7 +29,7 @@ public class ObjectiveSystem extends EntitySystem {
             Entity entity = entities.get(i);
             ObjectiveComponent objective = objectiveMapper.get(entity);
             BodyComponent objectiveBody = bodyMapper.get(entity);
-            
+
             float distance = objectiveBody.position.dst(objective.objectPosition);
             if(distance<=objectiveBody.radius) {
                 System.out.println("objective taken");

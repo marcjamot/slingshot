@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class TrajectorySystem extends EntitySystem implements RenderInterface {
 
-    private final static float timestepTime = 0.1f;
+    private final static float timestepTime = 0.5f;
 
     private ImmutableArray<Entity> trajectoryEntities;
     private ImmutableArray<Entity> gravityEntities;

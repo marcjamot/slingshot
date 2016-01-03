@@ -15,7 +15,7 @@
     },
     "collision": true,
     "controllable": {
-      "forward_force": 1.5,
+      "forward_force": 2.5,
       "direction_speed": 180.0
     },
     "gravity": false,
@@ -45,7 +45,7 @@
       "velocity_y": 0.0,
       "height": 30.0,
       "width": 30.0,
-      "weight": 400.0,
+      "weight": 800.0,
       "radius": 11.0
     },
     "collision": true,
@@ -71,7 +71,7 @@
       "velocity_y": 0.0,
       "height": 10.0,
       "width": 10.0,
-      "weight": 200.0,
+      "weight": 400.0,
       "radius": 4.5
     },
     "collision": true,
@@ -103,7 +103,7 @@
       "velocity_y": 0.0,
       "height": 6.0,
       "width": 6.0,
-      "weight": 150.0,
+      "weight": 250.0,
       "radius": 2.5
     },
     "collision": true,

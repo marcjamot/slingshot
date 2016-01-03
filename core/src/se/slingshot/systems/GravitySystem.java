@@ -12,7 +12,7 @@ import se.slingshot.components.NoGravityComponent;
  */
 public class GravitySystem extends EntitySystem {
     // ECS
-    public final static float G = 0.0667f;
+    public final static float G = 0.667f;
     public final static float MAX_ACC = 10f;
     private ImmutableArray<Entity> noGravityEntities;
     private ImmutableArray<Entity> gravityEntities;
