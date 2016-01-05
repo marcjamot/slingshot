@@ -30,7 +30,8 @@ public class ChooseLevelScreen implements Screen, InputProcessor {
     public void show() {
         Gdx.input.setInputProcessor(this);
 
-        camera = new OrthographicCamera(2.55f, 3.3f);
+        camera = new OrthographicCamera(1f, 1f);
+        camera.position.set(0.5f, 0.5f, 0.0f);
         batch = new SpriteBatch();
         background = new Texture("chooselevel.jpg");
     }
@@ -41,9 +42,9 @@ public class ChooseLevelScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         camera.update();
-        batch.setTransformMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(background, 0, 0);
+        batch.draw(background, 0, 0, 1, 1);
         batch.end();
     }
 
