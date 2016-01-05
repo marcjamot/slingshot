@@ -186,5 +186,6 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
     @SuppressWarnings("unused")
     public void handle(GameOver collision) {
         gameOver = true;
+        sound.stop();
     }
 }
