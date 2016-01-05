@@ -5,6 +5,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Handler;
 import se.slingshot.components.ControllableComponent;
@@ -33,6 +34,10 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
     private float fuel;
     private boolean gameOver;
 
+    // SFX
+    private Sound sound;
+    private boolean soundPlaying;
+
     public ControlSystem(ScreenInterface screenHandler, MBassador<GameOver> eventBus) {
         this.screenHandler = screenHandler;
         eventBus.subscribe(this);
@@ -42,6 +47,8 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(ControllableComponent.class, RenderComponent.class).get());
         Gdx.input.setInputProcessor(this);
+
+        sound = Gdx.audio.newSound(Gdx.files.internal("ScatterNoise1.mp3"));
     }
 
     @Override
@@ -57,6 +64,8 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
                 render.changeActiveAnimation("still");
                 control.directionThrust = 0;
                 control.forwardThrust = 0;
+                sound.stop();
+                soundPlaying = false;
                 continue;
             }
 
@@ -82,16 +91,23 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
                 if (control.fuel < 0) {
                     control.fuel = 0;
                 }
+                if (!soundPlaying) {
+                    long soundId = sound.play();
+                    sound.setLooping(soundId, true);
+                    soundPlaying = true;
+                }
             } else {
                 render.changeActiveAnimation("still");
+                sound.stop();
+                soundPlaying = false;
             }
         }
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if(gameOver){
-            switch (keycode){
+        if (gameOver) {
+            switch (keycode) {
                 case Input.Keys.ENTER:
                     screenHandler.reloadLevel();
                     break;
