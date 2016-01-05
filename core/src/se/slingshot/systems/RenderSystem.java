@@ -44,10 +44,16 @@ public class RenderSystem extends EntitySystem {
 
     private final Gui gui = new Gui();
     private final FuelInterface fuel;
-    private final List<RenderInterface> renderInterfaces;
+    private final List<RenderInterface> preRenderInterfaces;
+    private final List<RenderInterface> postRenderInterfaces;
 
-    public RenderSystem(List<RenderInterface> renderInterfaces, FuelInterface fuel, MBassador<GameOver> eventBus) {
-        this.renderInterfaces = renderInterfaces;
+    /**
+     * @param preRenderInterfaces Rendered before entities
+     * @param postRenderInterfaces Rendered after entities
+     */
+    public RenderSystem(List<RenderInterface> preRenderInterfaces, List<RenderInterface> postRenderInterfaces, FuelInterface fuel, MBassador<GameOver> eventBus) {
+        this.preRenderInterfaces = preRenderInterfaces;
+        this.postRenderInterfaces = postRenderInterfaces;
         this.fuel = fuel;
         eventBus.subscribe(this);
     }
@@ -102,6 +108,11 @@ public class RenderSystem extends EntitySystem {
         }
         spriteBatch.end();
 
+        // Pre render interfaces
+        for (RenderInterface renderInterface : preRenderInterfaces) {
+            renderInterface.render(camera, spriteBatch);
+        }
+
         // Entities
         spriteBatch.begin();
         for (int i = 0; i < entities.size(); i++) {
@@ -149,8 +160,11 @@ public class RenderSystem extends EntitySystem {
         }
         spriteBatch.end();
 
+        // Gui
         gui.render(deltaTime);
-        for (RenderInterface renderInterface : renderInterfaces) {
+
+        // Post render interfaces
+        for (RenderInterface renderInterface : postRenderInterfaces) {
             renderInterface.render(camera, spriteBatch);
         }
 
@@ -182,7 +196,7 @@ public class RenderSystem extends EntitySystem {
             texture = new Texture("lose.png");
         }
         final Texture finalTexture = texture;
-        renderInterfaces.add((c, sB) -> {
+        postRenderInterfaces.add((c, sB) -> {
             sB.begin();
             sB.draw(finalTexture, 20, 20, 120, 50);
             sB.end();

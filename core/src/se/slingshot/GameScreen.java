@@ -46,10 +46,11 @@ public class GameScreen implements Screen {
         ObjectiveSystem objectiveSystem = new ObjectiveSystem();
         OrbitSystem orbitSystem = new OrbitSystem();
         TrajectorySystem trajectorySystem = new TrajectorySystem();
-        List<RenderInterface> renderInterfaces = new ArrayList<>();
-        renderInterfaces.add(collisionSystem);
-        renderInterfaces.add(trajectorySystem);
-        renderSystem = new RenderSystem(renderInterfaces, controlSystem, gameOverBus);
+        List<RenderInterface> preRenderInterfaces = new ArrayList<>();
+        preRenderInterfaces.add(trajectorySystem);
+        List<RenderInterface> postRenderInterfaces = new ArrayList<>();
+        postRenderInterfaces.add(collisionSystem);
+        renderSystem = new RenderSystem(preRenderInterfaces, postRenderInterfaces, controlSystem, gameOverBus);
         WinConditionSystem winConditionSystem = new WinConditionSystem(gameOverBus);
 
         // Add the systems in the order they should execute
