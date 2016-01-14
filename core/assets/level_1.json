@@ -4,7 +4,7 @@
     "fuel_consumption_rate": 0.1,
     "body": {
       "start_x": 15.0,
-      "start_y": 15.0,
+      "start_y": 74.2,
       "direction_x": 1.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
@@ -36,25 +36,25 @@
     "trajectory": 10
   },
   {
-    "id": "sun",
+    "id": "bigg1",
     "body": {
-      "start_x": 70.0,
-      "start_y": 40.0,
+      "start_x": 47.3,
+      "start_y": 22.3,
       "direction_x": 0.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 30.0,
-      "width": 30.0,
-      "weight": 800.0,
-      "radius": 11.0
+      "height": 29.8,
+      "width": 29.8,
+      "weight": 1490.0,
+      "radius": 12.0
     },
     "collision": true,
     "gravity": true,
     "render": {
       "animations": {
         "images": [
-          "Sun.png"
+          "Exoplanet.png"
         ]
       },
       "repeat_animation": false,
@@ -62,27 +62,21 @@
     }
   },
   {
-    "id": "earth",
+    "id": "bigg2",
     "body": {
-      "start_x": 0.0,
-      "start_y": 0.0,
+      "start_x": 112.2,
+      "start_y": 58.2,
       "direction_x": 0.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 10.0,
-      "width": 10.0,
-      "weight": 400.0,
-      "radius": 4.5
+      "height": 32.0,
+      "width": 32.0,
+      "weight": 1600.0,
+      "radius": 16.0
     },
     "collision": true,
     "gravity": true,
-    "orbit": {
-      "id": "sun",
-      "distance": 30.0,
-      "angle": 45.0,
-      "speed": 20.0
-    },
     "render": {
       "animations": {
         "images": [
@@ -95,18 +89,18 @@
     "rotate_towards_light": "sun"
   },
   {
-    "id": "planetTwo",
+    "id": "small1",
     "body": {
-      "start_x": 140.0,
-      "start_y": 75.0,
+      "start_x": 52.5,
+      "start_y": 70.2,
       "direction_x": 0.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 6.0,
-      "width": 6.0,
-      "weight": 250.0,
-      "radius": 2.5
+      "height": 15.2,
+      "width": 15.2,
+      "weight": 760.0,
+      "radius": 7.6
     },
     "collision": true,
     "gravity": true,
@@ -122,18 +116,44 @@
     "rotate_towards_light": "sun"
   },
   {
-    "id": "goal area",
+    "id": "small2",
     "body": {
-      "start_x": 140.0,
-      "start_y": 75.0,
+      "start_x": 125.1,
+      "start_y": 15.5,
       "direction_x": 0.0,
       "direction_y": 0.0,
       "velocity_x": 0.0,
       "velocity_y": 0.0,
-      "height": 12.0,
-      "width": 12.0,
+      "height": 15.2,
+      "width": 15.2,
+      "weight": 760.0,
+      "radius": 7.6
+    },
+    "collision": true,
+    "gravity": true,
+    "render": {
+      "animations": {
+        "images": [
+          "Ice Giant.png"
+        ]
+      },
+      "repeat_animation": false,
+      "animation_speed": 1.0
+    }
+  },
+  {
+    "id": "goal area",
+    "body": {
+      "start_x": 125.1,
+      "start_y": 15.5,
+      "direction_x": 0.0,
+      "direction_y": 0.0,
+      "velocity_x": 0.0,
+      "velocity_y": 0.0,
+      "height": 25.6,
+      "width": 25.6,
       "weight": 0.0,
-      "radius": 6.0
+      "radius": 12.8
     },
     "goal_area": {
       "id": "player"
@@ -142,33 +162,6 @@
       "animations": {
         "images": [
           "win_dotted.png"
-        ]
-      },
-      "repeat_animation": false,
-      "animation_speed": 1.0
-    }
-  },
-  {
-    "id": "objective",
-    "body": {
-      "start_x": 120.0,
-      "start_y": 60.0,
-      "direction_x": 0.0,
-      "direction_y": 0.0,
-      "velocity_x": 0.0,
-      "velocity_y": 0.0,
-      "height": 3.0,
-      "width": 3.0,
-      "weight": 0.0,
-      "radius": 1.5
-    },
-    "objective": {
-      "id": "player"
-    },
-    "render": {
-      "animations": {
-        "images": [
-          "win_full.png"
         ]
       },
       "repeat_animation": false,
