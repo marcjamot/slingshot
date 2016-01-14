@@ -46,6 +46,24 @@ public class CollisionSystem extends EntitySystem implements RenderInterface {
 
     @Override
     public void update(float deltaTime) {
+        // Outside screen
+        for (int i = 0; i < entities.size(); i++) {
+            Entity entity = entities.get(i);
+            BodyComponent body = bodyMapper.get(entity);
+
+            float x = body.position.x;
+            float y = body.position.y;
+            if(x < 0 || 160 < x){
+                CollisionComponent collision = new CollisionComponent(entity);
+                eventBus.post(collision).now();
+            }
+            if(y < 0 || 90 < y){
+                CollisionComponent collision = new CollisionComponent(entity);
+                eventBus.post(collision).now();
+            }
+        }
+
+        // Collision
         for (int i = 0; i < entities.size(); i++) {
             Entity entity1 = entities.get(i);
             BodyComponent body1 = bodyMapper.get(entity1);
