@@ -2,6 +2,8 @@ package se.slingshot.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import net.engio.mbassy.bus.MBassador;
@@ -27,6 +29,7 @@ public class DeathSystem extends EntitySystem {
 
     // Death
     private final MBassador<GameOver> eventBus;
+    private Sound deathSound;
 
     /**
      * @param eventBus EventBus is used to pass messages between systems conveniently
@@ -35,6 +38,8 @@ public class DeathSystem extends EntitySystem {
         /** EventBus is used to pass messages between systems conveniently */
         eventBus.subscribe(this);
         this.eventBus = gameOverBus;
+
+        deathSound = Gdx.audio.newSound(Gdx.files.internal("boom6.wav"));
     }
 
     @Override
@@ -91,6 +96,7 @@ public class DeathSystem extends EntitySystem {
             explosion.add(new RenderComponent(false, timePerAnimation, animations));
             explosion.add(new LifetimeComponent(timePerAnimation * textures.length));
             engine.addEntity(explosion);
+            deathSound.play();
 
             // Remove entity
             engine.removeEntity(entity);
