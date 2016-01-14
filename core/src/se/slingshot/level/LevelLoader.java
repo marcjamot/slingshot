@@ -11,6 +11,7 @@ import com.owlike.genson.GenericType;
 import com.owlike.genson.Genson;
 import se.slingshot.components.*;
 import se.slingshot.implementations.Animation;
+import se.slingshot.systems.ControlSystem;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -27,6 +28,13 @@ import java.util.Map;
 public class LevelLoader {
     private ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class);
     private Map<String, Entity> entityMap = new HashMap<>();
+
+    /** For setting fuel consumption rate */
+    private final ControlSystem controlSystem;
+
+    public LevelLoader(ControlSystem controlSystem) {
+        this.controlSystem = controlSystem;
+    }
 
     public void from(Engine engine, String file) {
         InputStream inputStream = Gdx.files.internal(file).read();
@@ -50,6 +58,9 @@ public class LevelLoader {
         switch (key) {
             case "id":
                 entityMap.put((String) value, entity);
+                return null;
+            case "fuel_consumption_rate":
+                controlSystem.setFuelConsumptionRate((float) (double) value);
                 return null;
             case "body":
                 Map<String, Object> body = (Map<String, Object>) value;

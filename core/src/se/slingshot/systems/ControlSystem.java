@@ -32,6 +32,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
     private boolean leftThrust = false;
     private boolean rightThrust = false;
     private float fuel;
+    private float fuelConsumptionRate;
     private boolean gameOver;
 
     // SFX
@@ -41,6 +42,10 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
     public ControlSystem(ScreenInterface screenHandler, MBassador<GameOver> eventBus) {
         this.screenHandler = screenHandler;
         eventBus.subscribe(this);
+    }
+
+    public void setFuelConsumptionRate(float consumptionRate){
+        this.fuelConsumptionRate = consumptionRate;
     }
 
     @Override
@@ -87,7 +92,7 @@ public class ControlSystem extends EntitySystem implements InputProcessor, FuelI
             // Add thruster active time for fuel consumption
             if (forwardThrust) {
                 render.changeActiveAnimation("moving");
-                control.fuel -= deltaTime * 0.1f;
+                control.fuel -= deltaTime * fuelConsumptionRate;
                 if (control.fuel < 0) {
                     control.fuel = 0;
                 }

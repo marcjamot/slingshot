@@ -1,6 +1,7 @@
 [
   {
     "id": "player",
+    "fuel_consumption_rate": 0.1,
     "body": {
       "start_x": 15.0,
       "start_y": 15.0,

@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import net.engio.mbassy.bus.MBassador;
 import se.slingshot.components.CollisionComponent;
-import se.slingshot.components.RotateTowardsLightComponent;
 import se.slingshot.implementations.GameOver;
 import se.slingshot.interfaces.RenderInterface;
 import se.slingshot.interfaces.ScreenInterface;
@@ -68,7 +67,7 @@ public class GameScreen implements Screen {
         engine.addSystem(rotateTowardsLightSystem);
         engine.addSystem(renderSystem);
 
-        new LevelLoader().from(engine, levelName);
+        new LevelLoader(controlSystem).from(engine, levelName);
     }
 
     @Override
