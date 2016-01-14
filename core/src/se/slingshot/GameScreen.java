@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Screen;
 import net.engio.mbassy.bus.MBassador;
 import se.slingshot.components.CollisionComponent;
+import se.slingshot.components.RotateTowardsLightComponent;
 import se.slingshot.implementations.GameOver;
 import se.slingshot.interfaces.RenderInterface;
 import se.slingshot.interfaces.ScreenInterface;
@@ -51,6 +52,7 @@ public class GameScreen implements Screen {
         List<RenderInterface> postRenderInterfaces = new ArrayList<>();
         postRenderInterfaces.add(collisionSystem);
         renderSystem = new RenderSystem(preRenderInterfaces, postRenderInterfaces, controlSystem, gameOverBus);
+        RotateTowardsLightSystem rotateTowardsLightSystem = new RotateTowardsLightSystem();
         WinConditionSystem winConditionSystem = new WinConditionSystem(gameOverBus);
 
         // Add the systems in the order they should execute
@@ -63,6 +65,7 @@ public class GameScreen implements Screen {
         engine.addSystem(objectiveSystem);
         engine.addSystem(winConditionSystem);
         engine.addSystem(trajectorySystem);
+        engine.addSystem(rotateTowardsLightSystem);
         engine.addSystem(renderSystem);
 
         new LevelLoader().from(engine, levelName);

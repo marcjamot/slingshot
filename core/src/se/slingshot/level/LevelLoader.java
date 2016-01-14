@@ -126,6 +126,10 @@ public class LevelLoader {
                         (float) (double) render.get("animation_speed"),
                         animations.toArray(new Animation[animations.size()])
                 );
+            case "rotate_towards_light":
+                Entity rtlEntity = entityMap.get(value);
+                BodyComponent rtlBody = bodyMapper.get(rtlEntity);
+                return new RotateTowardsLightComponent(rtlBody.position);
             case "trajectory":
                 return new TrajectoryComponent(
                         (int) (long) value
