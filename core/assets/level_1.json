@@ -90,7 +90,8 @@
       },
       "repeat_animation": false,
       "animation_speed": 1.0
-    }
+    },
+    "rotate_towards_light": "sun"
   },
   {
     "id": "planetTwo",
@@ -116,7 +117,8 @@
       },
       "repeat_animation": false,
       "animation_speed": 1.0
-    }
+    },
+    "rotate_towards_light": "sun"
   },
   {
     "id": "goal area",
