@@ -14,7 +14,7 @@ public class SlingshotGame extends Game implements ScreenInterface {
     @Override
     public void create() {
         menu();
-        music = Gdx.audio.newMusic(Gdx.files.internal("Lagrima.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("low-fi.mp3"));
         music.setLooping(true);
         music.setVolume(0.5f);
         music.play();
